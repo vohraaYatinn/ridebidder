@@ -53,7 +53,10 @@ const DashboardPage = () => {
       <main className="p-4 space-y-6">
         {/* Stats Cards */}
         <section className="grid grid-cols-2 gap-4">
-          <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
+          <div 
+            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate('/ongoing-rides')}
+          >
             <div className="flex items-center gap-2">
               <Car className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Ongoing Rides</h3>
@@ -61,7 +64,10 @@ const DashboardPage = () => {
             <p className="text-2xl font-bold mt-2">{mockStats.ongoingRides}</p>
           </div>
           
-          <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
+          <div 
+            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate('/total-rides')}
+          >
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Rides</h3>
@@ -69,7 +75,10 @@ const DashboardPage = () => {
             <p className="text-2xl font-bold mt-2">{mockStats.totalRides}</p>
           </div>
           
-          <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
+          <div 
+            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate('/total-bids')}
+          >
             <div className="flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Bids</h3>
@@ -77,7 +86,10 @@ const DashboardPage = () => {
             <p className="text-2xl font-bold mt-2">{mockStats.totalBids}</p>
           </div>
           
-          <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
+          <div 
+            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate('/ratings')}
+          >
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Rating</h3>

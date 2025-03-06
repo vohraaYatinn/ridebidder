@@ -13,6 +13,10 @@ import WalletPage from "./pages/WalletPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 import RideDetailPage from "./pages/RideDetailPage";
+import OngoingRidesPage from "./pages/OngoingRidesPage";
+import TotalRidesPage from "./pages/TotalRidesPage";
+import TotalBidsPage from "./pages/TotalBidsPage";
+import RatingsPage from "./pages/RatingsPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +34,10 @@ const App = () => (
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/rides/:rideId" element={<RideDetailPage />} />
+          <Route path="/ongoing-rides" element={<OngoingRidesPage />} />
+          <Route path="/total-rides" element={<TotalRidesPage />} />
+          <Route path="/total-bids" element={<TotalBidsPage />} />
+          <Route path="/ratings" element={<RatingsPage />} />
           <Route path="/bids" element={<BidsPage />} />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/profile" element={<ProfilePage />} />

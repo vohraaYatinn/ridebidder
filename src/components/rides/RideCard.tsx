@@ -10,9 +10,10 @@ import { useNavigate } from 'react-router-dom';
 interface RideCardProps {
   ride: Ride;
   onBidSubmit?: (rideId: string, amount: number) => void;
+  onClick?: () => void;
 }
 
-const RideCard = ({ ride, onBidSubmit }: RideCardProps) => {
+const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
   const [bidAmount, setBidAmount] = useState(ride.basePrice.toString());
   const [showBidForm, setShowBidForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,8 +62,23 @@ const RideCard = ({ ride, onBidSubmit }: RideCardProps) => {
     }, 1000);
   };
 
-  const handleCardClick = () => {
-    navigate(`/rides/${ride.id}`);
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If we're clicking on a button or input inside the card, don't navigate
+    if (
+      e.target instanceof HTMLButtonElement ||
+      e.target instanceof HTMLInputElement ||
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('input')
+    ) {
+      e.stopPropagation();
+      return;
+    }
+    
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/rides/${ride.id}`);
+    }
   };
 
   return (
