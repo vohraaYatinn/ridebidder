@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../common/Card';
 import { Ride } from '@/data/mockData';
 import { Clock, MapPin, User, Navigation, DollarSign } from 'lucide-react';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 interface RideCardProps {
   ride: Ride;

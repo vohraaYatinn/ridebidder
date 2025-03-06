@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { bids as mockBids } from '@/data/mockData';
 import BidCard from '@/components/rides/BidCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 const BidsPage = () => {
   const [bids, setBids] = useState(mockBids);

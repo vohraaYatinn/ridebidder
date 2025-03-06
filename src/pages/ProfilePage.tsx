@@ -1,4 +1,3 @@
-
 import React from 'react';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import ProfileHeader from '@/components/profile/ProfileHeader';
@@ -7,7 +6,7 @@ import { userProfile, reviews } from '@/data/mockData';
 import Button from '@/components/common/Button';
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 const ProfilePage = () => {
   const navigate = useNavigate();

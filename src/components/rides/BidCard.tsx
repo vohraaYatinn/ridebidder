@@ -1,11 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../common/Card';
 import { Bid } from '@/data/mockData';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { MapPin, Navigation, DollarSign, Calendar, Clock } from 'lucide-react';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 interface BidCardProps {
   bid: Bid;
@@ -13,7 +12,7 @@ interface BidCardProps {
 }
 
 const BidCard = ({ bid, onCancel }: BidCardProps) => {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getBadgeVariant = () => {
     switch (bid.status) {

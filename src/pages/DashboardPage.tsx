@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { rides as mockRides } from '@/data/mockData';
 import RideCard from '@/components/rides/RideCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 import { Search } from 'lucide-react';
 
 const DashboardPage = () => {
