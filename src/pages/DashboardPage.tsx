@@ -4,6 +4,7 @@ import RideCard from '@/components/rides/RideCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { toast } from '@/hooks/use-toast';
 import { Search, Car, Clock, DollarSign, Star, BarChart2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Mock statistics data (in a real app, this would come from an API)
 const mockStats = {
@@ -17,6 +18,7 @@ const mockStats = {
 const DashboardPage = () => {
   const [rides, setRides] = useState(mockRides);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
   
   const handleBidSubmit = (rideId: string, amount: number) => {
     console.log(`Bid of $${amount} placed on ride ${rideId}`);
@@ -25,6 +27,10 @@ const DashboardPage = () => {
       description: `Your bid of $${amount} has been submitted.`,
     });
     // In a real app, you would send this to an API
+  };
+  
+  const handleRideClick = (rideId: string) => {
+    navigate(`/rides/${rideId}`);
   };
   
   const filteredRides = rides.filter(ride => 
@@ -126,6 +132,7 @@ const DashboardPage = () => {
                   key={ride.id} 
                   ride={ride} 
                   onBidSubmit={handleBidSubmit}
+                  onClick={() => handleRideClick(ride.id)}
                 />
               ))
             ) : (
