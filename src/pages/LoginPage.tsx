@@ -17,8 +17,8 @@ const LoginPage = () => {
               <span className="text-xs font-bold text-primary-foreground">D</span>
             </div>
           </div>
-          <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
-          <p className="text-muted-foreground">Sign in to your account</p>
+          <h1 className="text-2xl font-bold mb-1">Sign in with phone</h1>
+          <p className="text-muted-foreground">Verify your identity with OTP</p>
         </div>
         
         <LoginForm />

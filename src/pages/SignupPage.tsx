@@ -17,8 +17,8 @@ const SignupPage = () => {
               <span className="text-xs font-bold text-primary-foreground">D</span>
             </div>
           </div>
-          <h1 className="text-2xl font-bold mb-1">Create Account</h1>
-          <p className="text-muted-foreground">Sign up to start driving</p>
+          <h1 className="text-2xl font-bold mb-1">Driver Registration</h1>
+          <p className="text-muted-foreground">Join our network and start earning</p>
         </div>
         
         <SignupForm />
