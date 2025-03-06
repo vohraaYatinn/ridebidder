@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
-import { ChevronRight, MapPin, Clock, DollarSign, Star } from 'lucide-react';
+import { ChevronRight, MapPin, Clock, DollarSign, Star, Car, Navigation, MapIcon, Users } from 'lucide-react';
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -10,24 +10,24 @@ const Onboarding = () => {
   
   const slides = [
     {
+      icon: <Car size={48} className="text-primary" />,
+      title: "Drive Your Way",
+      description: "Join our network of professional drivers and start earning on your own schedule."
+    },
+    {
       icon: <MapPin size={48} className="text-primary" />,
       title: "Find Nearby Rides",
       description: "Browse and bid on available rides in your area with just a few taps."
     },
     {
-      icon: <Clock size={48} className="text-primary" />,
-      title: "Flexible Schedule",
-      description: "Work when you want. Choose rides that fit your availability."
+      icon: <Navigation size={48} className="text-primary" />,
+      title: "Smart Navigation",
+      description: "Get the best routes with real-time traffic updates for efficient pickups and drop-offs."
     },
     {
       icon: <DollarSign size={48} className="text-primary" />,
       title: "Competitive Earnings",
       description: "Set your own prices and maximize your earning potential."
-    },
-    {
-      icon: <Star size={48} className="text-primary" />,
-      title: "Build Your Reputation",
-      description: "Provide great service, earn high ratings, and get more rides."
     }
   ];
   
@@ -62,6 +62,12 @@ const Onboarding = () => {
           <div className="text-center space-y-2">
             <h2 className="text-2xl font-bold">{slides[currentSlide].title}</h2>
             <p className="text-muted-foreground">{slides[currentSlide].description}</p>
+          </div>
+          
+          <div className="flex justify-center space-x-6 mt-8">
+            <MapIcon className="h-8 w-8 text-blue-400 animate-pulse" />
+            <Users className="h-8 w-8 text-green-400" />
+            <Star className="h-8 w-8 text-yellow-400 fill-yellow-400" />
           </div>
         </div>
       </div>

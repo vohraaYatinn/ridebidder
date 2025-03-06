@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Car, Map, Navigation } from 'lucide-react';
 
 const SplashScreen = () => {
   const navigate = useNavigate();
@@ -43,6 +44,12 @@ const SplashScreen = () => {
         
         <h1 className="text-2xl font-bold tracking-tight">RideBidder</h1>
         <p className="text-muted-foreground">Driver's App</p>
+        
+        <div className="flex space-x-4 my-2">
+          <Car className="h-6 w-6 text-primary animate-bounce" />
+          <Map className="h-6 w-6 text-blue-400 animate-pulse" />
+          <Navigation className="h-6 w-6 text-green-400 animate-bounce" />
+        </div>
         
         <div className="w-48 h-1 bg-secondary rounded-full overflow-hidden">
           <div 
