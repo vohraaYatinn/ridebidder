@@ -13,7 +13,11 @@ const ProfilePage = () => {
   
   const handleLogout = () => {
     // Simulate logout
-    toast.success('Logged out successfully');
+    toast({
+      title: "Success",
+      description: "Logged out successfully",
+      variant: "default",
+    });
     setTimeout(() => {
       navigate('/login');
     }, 1000);

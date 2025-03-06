@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
@@ -16,7 +17,11 @@ const LoginForm = () => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      toast.success('Logged in successfully');
+      toast({
+        title: "Success",
+        description: "Logged in successfully",
+        variant: "default",
+      });
       navigate('/dashboard');
     }, 1500);
   };

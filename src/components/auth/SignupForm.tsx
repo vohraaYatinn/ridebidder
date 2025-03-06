@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
@@ -18,7 +19,11 @@ const SignupForm = () => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      toast.success('Account created successfully');
+      toast({
+        title: "Success",
+        description: "Account created successfully",
+        variant: "default",
+      });
       navigate('/dashboard');
     }, 1500);
   };

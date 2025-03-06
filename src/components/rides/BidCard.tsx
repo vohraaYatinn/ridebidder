@@ -39,7 +39,11 @@ const BidCard = ({ bid, onCancel }: BidCardProps) => {
       if (onCancel) {
         onCancel(bid.id);
       }
-      toast.success('Bid cancelled successfully');
+      toast({
+        title: "Success",
+        description: "Bid cancelled successfully",
+        variant: "default",
+      });
       setIsLoading(false);
     }, 1000);
   };

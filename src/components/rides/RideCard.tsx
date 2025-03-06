@@ -33,7 +33,11 @@ const RideCard = ({ ride, onBidSubmit }: RideCardProps) => {
 
   const handleBidSubmit = () => {
     if (!bidAmount || isNaN(Number(bidAmount)) || Number(bidAmount) <= 0) {
-      toast.error('Please enter a valid bid amount');
+      toast({
+        title: "Error",
+        description: "Please enter a valid bid amount",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -44,7 +48,11 @@ const RideCard = ({ ride, onBidSubmit }: RideCardProps) => {
       if (onBidSubmit) {
         onBidSubmit(ride.id, Number(bidAmount));
       }
-      toast.success(`Bid of $${bidAmount} placed successfully`);
+      toast({
+        title: "Success",
+        description: `Bid of $${bidAmount} placed successfully`,
+        variant: "default",
+      });
       setShowBidForm(false);
       setIsSubmitting(false);
       setBidAmount(ride.basePrice.toString());
