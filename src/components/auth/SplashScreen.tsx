@@ -34,7 +34,7 @@ const SplashScreen = () => {
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center animate-pulse">
             <div className="w-20 h-20 rounded-full bg-background flex items-center justify-center">
-              <span className="text-4xl font-bold text-primary">RB</span>
+              <span className="text-4xl font-bold text-primary">CM</span>
             </div>
           </div>
           <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
@@ -42,7 +42,7 @@ const SplashScreen = () => {
           </div>
         </div>
         
-        <h1 className="text-2xl font-bold tracking-tight">RideBidder</h1>
+        <h1 className="text-2xl font-bold tracking-tight">CabMate</h1>
         <p className="text-muted-foreground">Driver's App</p>
         
         <div className="flex space-x-4 my-2">
