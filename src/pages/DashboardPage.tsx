@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { rides as mockRides } from '@/data/mockData';
 import RideCard from '@/components/rides/RideCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { toast } from '@/hooks/use-toast';
 import { Search, Car, Clock, DollarSign, Star, BarChart2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import useAxios from '../hooks/useAxios'
+import { getDashboardDataDriver } from '../urls/urls';
 
 // Mock statistics data (in a real app, this would come from an API)
 const mockStats = {
@@ -16,6 +18,8 @@ const mockStats = {
 };
 
 const DashboardPage = () => {
+  const[dashboardData, dashboardDataError, dashboardDataLoading, dashboardDataSubmit] = useAxios()
+
   const [rides, setRides] = useState(mockRides);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -37,6 +41,20 @@ const DashboardPage = () => {
     ride.pickupLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
     ride.dropLocation.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(()=>{
+    dashboardDataSubmit(getDashboardDataDriver())
+  },[])
+
+  useEffect(()=>{
+   toast({
+    title: "Error",
+    description: dashboardDataError?.response?.data?.error?
+    dashboardDataError?.response?.data?.error
+    :"Dashboard data not found",
+    variant: "destructive",
+   })
+  },[dashboardDataError])
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -61,7 +79,7 @@ const DashboardPage = () => {
               <Car className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Ongoing Rides</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.ongoingRides}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.ongoing_rides?dashboardData?.ongoing_rides?.length:'0'}</p>
           </div>
           
           <div 
@@ -72,7 +90,7 @@ const DashboardPage = () => {
               <Clock className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Rides</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.totalRides}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.total_rides?dashboardData?.total_rides.length:'0'}</p>
           </div>
           
           <div 
@@ -83,7 +101,7 @@ const DashboardPage = () => {
               <DollarSign className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Bids</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.totalBids}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.total_bids?dashboardData?.total_bids.length:'0'}</p>
           </div>
           
           <div 
@@ -94,7 +112,7 @@ const DashboardPage = () => {
               <Star className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Rating</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.averageRating}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.average_rating?dashboardData?.average_rating.length:'0'}</p>
           </div>
         </section>
         
