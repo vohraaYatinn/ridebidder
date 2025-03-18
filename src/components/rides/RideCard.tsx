@@ -6,15 +6,11 @@ import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import moment from "moment";
 
-interface RideCardProps {
-  ride: Ride;
-  onBidSubmit?: (rideId: string, amount: number) => void;
-  onClick?: () => void;
-}
 
-const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
-  const [bidAmount, setBidAmount] = useState(ride.basePrice.toString());
+const RideCard = ({ride, onBidSubmit, onClick }) => {
+  const [bidAmount, setBidAmount] = useState('0');
   const [showBidForm, setShowBidForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -43,23 +39,25 @@ const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
       });
       return;
     }
-
-    setIsSubmitting(true);
+    else{
+      onBidSubmit(ride.id, Number(bidAmount));
+    }
+    // setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      if (onBidSubmit) {
-        onBidSubmit(ride.id, Number(bidAmount));
-      }
-      toast({
-        title: "Success",
-        description: `Bid of $${bidAmount} placed successfully`,
-        variant: "default",
-      });
-      setShowBidForm(false);
-      setIsSubmitting(false);
-      setBidAmount(ride.basePrice.toString());
-    }, 1000);
+    // // Simulate API call
+    // setTimeout(() => {
+    //   if (onBidSubmit) {
+    //     onBidSubmit(ride.id, Number(bidAmount));
+    //   }
+    //   toast({
+    //     title: "Success",
+    //     description: `Bid of $${bidAmount} placed successfully`,
+    //     variant: "default",
+    //   });
+    //   setShowBidForm(false);
+    //   setIsSubmitting(false);
+    //   setBidAmount(ride.basePrice.toString());
+    // }, 1000);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -89,7 +87,7 @@ const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
       <Card variant="glass" className="w-full overflow-hidden animate-scale-in">
         <CardHeader className="pb-2 border-b border-border/20">
           <div className="flex justify-between items-start">
-            <CardTitle>{ride.pickupTime} - {ride.pickupDate}</CardTitle>
+            <CardTitle>{ moment(ride.pickup_date).format("MMMM D, YYYY h:mm A")} </CardTitle>
             {getStatusBadge(ride.status)}
           </div>
         </CardHeader>
@@ -100,7 +98,7 @@ const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
               <MapPin className="mr-2 h-5 w-5 text-green-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-medium">Pickup</p>
-                <p className="text-sm text-muted-foreground">{ride.pickupLocation}</p>
+                <p className="text-sm text-muted-foreground">{ride.pickup_location}</p>
               </div>
             </div>
             
@@ -108,30 +106,30 @@ const RideCard = ({ ride, onBidSubmit, onClick }: RideCardProps) => {
               <Navigation className="mr-2 h-5 w-5 text-red-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-medium">Dropoff</p>
-                <p className="text-sm text-muted-foreground">{ride.dropLocation}</p>
+                <p className="text-sm text-muted-foreground">{ride.drop_location}</p>
               </div>
             </div>
           </div>
           
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <Clock className="mr-2 h-4 w-4 text-blue-400" />
               <span className="text-sm">{ride.estimatedDuration}</span>
-            </div>
-            <div className="flex items-center">
+            </div> */}
+            {/* <div className="flex items-center">
               <User className="mr-2 h-4 w-4 text-blue-400" />
               <div className="flex items-center">
                 <span className="text-sm mr-1">{ride.passengerRating}</span>
                 <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
               </div>
-            </div>
+            </div> */}
             <div className="flex items-center">
               <MapPin className="mr-2 h-4 w-4 text-blue-400" />
-              <span className="text-sm">{ride.estimatedDistance}</span>
+              <span className="text-sm">{ride.trip_km}</span>
             </div>
             <div className="flex items-center">
               <DollarSign className="mr-2 h-4 w-4 text-blue-400" />
-              <span className="text-sm">${ride.basePrice}</span>
+              <span className="text-sm">${ride.trip_type}</span>
             </div>
           </div>
           

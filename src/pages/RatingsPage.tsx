@@ -3,60 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, ThumbsUp, MessageSquare, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNavigation from '@/components/common/BottomNavigation';
-
+import { useLocation } from 'react-router-dom';
 // Mock data (in a real app, this would come from an API)
-const mockRatings = {
-  averageRating: 4.7,
-  totalRatings: 38,
-  ratingDistribution: [0, 1, 3, 8, 26], // 1-star to 5-star counts
-  recentReviews: [
-    {
-      id: 'review-001',
-      passengerName: 'Jessica Williams',
-      rating: 5,
-      comment: 'Very professional driver. Car was clean and the ride was smooth.',
-      date: '2023-11-15'
-    },
-    {
-      id: 'review-002',
-      passengerName: 'Thomas Anderson',
-      rating: 5,
-      comment: 'Excellent service! Arrived on time and got me to my destination quickly.',
-      date: '2023-11-14'
-    },
-    {
-      id: 'review-003',
-      passengerName: 'Amanda Garcia',
-      rating: 4,
-      comment: 'Good driver, but took a slightly longer route than necessary.',
-      date: '2023-11-13'
-    },
-    {
-      id: 'review-004',
-      passengerName: 'David Miller',
-      rating: 5,
-      comment: 'Very friendly and professional. Would ride again!',
-      date: '2023-11-12'
-    },
-    {
-      id: 'review-005',
-      passengerName: 'Sophia Lee',
-      rating: 3,
-      comment: 'Decent ride but car could have been cleaner.',
-      date: '2023-11-10'
-    }
-  ],
-  badges: [
-    { name: 'Punctual Driver', count: 32 },
-    { name: 'Clean Car', count: 28 },
-    { name: 'Excellent Service', count: 25 },
-    { name: 'Safe Driver', count: 30 }
-  ]
-};
 
 const RatingsPage = () => {
   const navigate = useNavigate();
-  
+  const location = useLocation();
+  const { ratings, average_rating, ratingDistribution } = location.state || {}
   // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -96,11 +49,11 @@ const RatingsPage = () => {
         <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-2xl font-bold">{mockRatings.averageRating}</h2>
+              <h2 className="text-2xl font-bold">{average_rating?average_rating:'0'}</h2>
               <div className="flex items-center mt-1">
-                {renderStars(Math.round(mockRatings.averageRating))}
+                {renderStars(Math.round(average_rating?average_rating:0))}
                 <span className="text-sm text-muted-foreground ml-2">
-                  ({mockRatings.totalRatings} ratings)
+                  ({ratings? ratings.length:0} ratings)
                 </span>
               </div>
             </div>
@@ -111,9 +64,9 @@ const RatingsPage = () => {
           
           {/* Rating Distribution */}
           <div className="space-y-2">
-            {mockRatings.ratingDistribution.map((count, index) => {
+            {ratingDistribution?.map((count, index) => {
               const starNumber = 5 - index;
-              const percentage = (count / mockRatings.totalRatings) * 100;
+              const percentage = (count / ratings?.length) * 100;
               
               return (
                 <div key={starNumber} className="flex items-center gap-2">
@@ -132,14 +85,14 @@ const RatingsPage = () => {
         </div>
         
         {/* Badges */}
-        <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
+        {/* <div className="bg-card rounded-lg p-4 border border-border shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <Award className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-semibold">Your Badges</h2>
           </div>
           
           <div className="grid grid-cols-2 gap-3">
-            {mockRatings.badges.map((badge, index) => (
+            {ratings.badges.map((badge, index) => (
               <div key={index} className="border border-border rounded-lg p-3 flex flex-col items-center">
                 <ThumbsUp className="h-6 w-6 text-primary mb-1" />
                 <p className="text-sm font-medium text-center">{badge.name}</p>
@@ -147,7 +100,7 @@ const RatingsPage = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         
         {/* Recent Reviews */}
         <div>
@@ -157,16 +110,16 @@ const RatingsPage = () => {
           </div>
           
           <div className="space-y-4">
-            {mockRatings.recentReviews.map(review => (
+            {ratings?.map(review => (
               <div key={review.id} className="bg-card rounded-lg p-4 border border-border shadow-sm">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold">{review.passengerName}</h3>
+                  <h3 className="font-semibold">{review?.customer?.first_name}</h3>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    review.rating === 5 
+                    review?.rating === 5 
                       ? 'bg-green-100 text-green-800' 
                       : 'bg-yellow-100 text-yellow-800'
                   }`}>
-                    {review.rating} ★
+                    {review?.rating} ★
                   </span>
                 </div>
                 
@@ -180,7 +133,7 @@ const RatingsPage = () => {
                     <div className="space-y-3 flex-1">
                       <div>
                         <p className="text-xs text-muted-foreground">Comment</p>
-                        <p className="text-sm">{review.comment}</p>
+                        <p className="text-sm">{review?.review}</p>
                       </div>
                     </div>
                   </div>
@@ -189,7 +142,7 @@ const RatingsPage = () => {
                 <div className="flex justify-between items-center pt-2 border-t border-border">
                   <div>
                     <p className="text-xs text-muted-foreground">Date</p>
-                    <p className="text-sm font-medium">{formatDate(review.date)}</p>
+                    <p className="text-sm font-medium">{formatDate(review?.created_at)}</p>
                   </div>
                 </div>
               </div>

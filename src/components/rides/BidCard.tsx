@@ -5,13 +5,11 @@ import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { MapPin, Navigation, DollarSign, Calendar, Clock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import moment from "moment";
 
-interface BidCardProps {
-  bid: Bid;
-  onCancel?: (bidId: string) => void;
-}
 
-const BidCard = ({ bid, onCancel }: BidCardProps) => {
+
+const BidCard = ({ bid, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getBadgeVariant = () => {
@@ -57,9 +55,9 @@ const BidCard = ({ bid, onCancel }: BidCardProps) => {
     <Card variant="glass" className="w-full animate-scale-in">
       <CardHeader className="pb-2 border-b border-border/20">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-base">{bid.ride.pickupTime} - {bid.ride.pickupDate}</CardTitle>
+          <CardTitle className="text-base">{ moment(bid?.booking?.pickup_date).format('DD-MM-YYYY') } </CardTitle>
           <Badge variant={getBadgeVariant()}>
-            {bid.status.charAt(0) + bid.status.slice(1).toLowerCase()}
+            {bid?.status.charAt(0) + bid?.status.slice(1).toLowerCase()}
           </Badge>
         </div>
       </CardHeader>
@@ -70,7 +68,7 @@ const BidCard = ({ bid, onCancel }: BidCardProps) => {
             <MapPin className="mr-2 h-5 w-5 text-green-500 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium">Pickup</p>
-              <p className="text-sm text-muted-foreground">{bid.ride.pickupLocation}</p>
+              <p className="text-sm text-muted-foreground">{bid?.booking?.pickup_location}</p>
             </div>
           </div>
           
@@ -78,7 +76,7 @@ const BidCard = ({ bid, onCancel }: BidCardProps) => {
             <Navigation className="mr-2 h-5 w-5 text-red-500 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium">Dropoff</p>
-              <p className="text-sm text-muted-foreground">{bid.ride.dropLocation}</p>
+              <p className="text-sm text-muted-foreground">{bid?.booking?.drop_location}</p>
             </div>
           </div>
         </div>
@@ -86,11 +84,11 @@ const BidCard = ({ bid, onCancel }: BidCardProps) => {
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="flex items-center">
             <DollarSign className="mr-2 h-4 w-4 text-blue-400" />
-            <span className="text-sm font-medium">${bid.amount}</span>
+            <span className="text-sm font-medium">${bid?.bid_amount}</span>
           </div>
           <div className="flex items-center">
             <Calendar className="mr-2 h-4 w-4 text-blue-400" />
-            <span className="text-sm">{formatDate(bid.createdAt).split(',')[0]}</span>
+            <span className="text-sm">{formatDate(bid?.timestamp).split(',')[0]}</span>
           </div>
         </div>
       </CardContent>
