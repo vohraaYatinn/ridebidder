@@ -1,13 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import { toast } from '@/hooks/use-toast';
 import { Phone, MessageSquare } from 'lucide-react';
+import { sendOtpService,verifyOtpService } from '@/urls/urls';
+import useAxios from '@/hooks/useAxios';
 
 const LoginForm = () => {
+  const[otpResponse, otpError, otpLoading,otpSubmit] = useAxios()
+  const[otpVerifyResponse, otpVerifyError, otpVerifyLoading,otpVerifySubmit] = useAxios()
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [otp, setOtp] = useState('');
@@ -23,19 +27,11 @@ const LoginForm = () => {
       });
       return;
     }
+    else if (phoneNumber.length===10){
+      sendOtp()
+    }
     
-    setIsLoading(true);
-    
-    // Simulate OTP sending
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowOtpInput(true);
-      toast({
-        title: "Success",
-        description: `OTP sent to ${phoneNumber}`,
-        variant: "default",
-      });
-    }, 1500);
+
   };
 
   const handleVerifyOtp = (e: React.FormEvent) => {
@@ -49,21 +45,68 @@ const LoginForm = () => {
       });
       return;
     }
+    else if (otp.length===4){
+      verifyOtp()
+    }
     
-    setIsLoading(true);
+
     
-    // Simulate OTP verification
-    setTimeout(() => {
-      setIsLoading(false);
+
+  };
+  useEffect(()=>{
+    if(otpResponse.result==='success'){
+      setShowOtpInput(true);
       toast({
         title: "Success",
-        description: "Logged in successfully",
+        description: `OTP sent to ${phoneNumber}`,
         variant: "default",
       });
-      navigate('/dashboard');
-    }, 1500);
-  };
+    }
 
+  },[otpResponse])
+
+
+useEffect(()=>{
+  toast({
+    title: "Error",
+    description:otpError?.response?.data?.error?
+    otpError?.response?.data?.error :`OTP not sent to ${phoneNumber}`,
+    variant: "destructive",
+  });
+},[otpError])
+
+useEffect(()=>{
+  if(otpVerifyResponse.result==='success'){
+    const token = otpVerifyResponse['access']; 
+    localStorage.setItem("token", token);
+    navigate('/dashboard')
+    toast({
+      title: "Success",
+      description: `Login Successfully`,
+      variant: "default",
+    });
+  }
+
+},[otpVerifyResponse])
+
+
+useEffect(()=>{
+toast({
+  title: "Error",
+  description: `Invalid OTP`,
+  variant: "destructive",
+});
+},[otpVerifyError])
+
+const sendOtp = ()=>{
+
+  otpSubmit(sendOtpService({'phone':phoneNumber}))
+}
+
+const verifyOtp = ()=>{
+
+  otpVerifySubmit(verifyOtpService({'otp':otp,'phone':phoneNumber}))
+}
   return (
     <div className="space-y-4 w-full max-w-sm">
       {!showOtpInput ? (
@@ -87,7 +130,7 @@ const LoginForm = () => {
           <Button
             type="submit"
             className="w-full transition-all duration-300 transform hover:translate-y-[-2px]"
-            isLoading={isLoading}
+            isLoading={otpLoading}
           >
             Send OTP
           </Button>
@@ -135,7 +178,7 @@ const LoginForm = () => {
           <Button
             type="submit"
             className="w-full transition-all duration-300 transform hover:translate-y-[-2px]"
-            isLoading={isLoading}
+            isLoading={otpVerifyLoading}
           >
             Verify & Login
           </Button>

@@ -1,74 +1,25 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNavigation from '@/components/common/BottomNavigation';
+import moment from "moment";
 
 // Mock data (in a real app, this would come from an API)
-const mockRideHistory = [
-  {
-    id: 'ride-101',
-    passengerName: 'Sarah Wilson',
-    pickupLocation: '123 Main St, Boston, MA',
-    dropLocation: '456 Park Ave, Boston, MA',
-    date: '2023-11-15',
-    time: '10:30 AM',
-    fare: 24.50,
-    status: 'Completed'
-  },
-  {
-    id: 'ride-102',
-    passengerName: 'James Miller',
-    pickupLocation: '789 Oak Dr, Cambridge, MA',
-    dropLocation: '101 Pine St, Boston, MA',
-    date: '2023-11-14',
-    time: '11:15 AM',
-    fare: 18.75,
-    status: 'Completed'
-  },
-  {
-    id: 'ride-103',
-    passengerName: 'Robert Taylor',
-    pickupLocation: '222 Elm St, Somerville, MA',
-    dropLocation: '333 Maple Rd, Boston, MA',
-    date: '2023-11-14',
-    time: '12:00 PM',
-    fare: 32.00,
-    status: 'Completed'
-  },
-  {
-    id: 'ride-104',
-    passengerName: 'Jennifer Davis',
-    pickupLocation: '444 Cedar Ln, Boston, MA',
-    dropLocation: '555 Birch Ave, Cambridge, MA',
-    date: '2023-11-13',
-    time: '3:45 PM',
-    fare: 27.25,
-    status: 'Completed'
-  },
-  {
-    id: 'ride-105',
-    passengerName: 'Michael Brown',
-    pickupLocation: '666 Walnut St, Boston, MA',
-    dropLocation: '777 Cherry Blvd, Somerville, MA',
-    date: '2023-11-12',
-    time: '9:20 AM',
-    fare: 22.50,
-    status: 'Cancelled'
-  }
-];
+
 
 const TotalRidesPage = () => {
   const navigate = useNavigate();
-  
+  const location = useLocation();
+  const { total_rides } = location.state || {}
   // Group rides by date
-  const ridesByDate = mockRideHistory.reduce((acc, ride) => {
-    if (!acc[ride.date]) {
-      acc[ride.date] = [];
-    }
-    acc[ride.date].push(ride);
-    return acc;
-  }, {});
+  // const ridesByDate = total_rides.reduce((acc, ride) => {
+  //   if (!acc[ride.date]) {
+  //     acc[ride.date] = [];
+  //   }
+  //   acc[ride.date].push(ride);
+  //   return acc;
+  // }, {});
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -98,28 +49,28 @@ const TotalRidesPage = () => {
         <div className="flex justify-between items-center">
           <div className="bg-card rounded-lg p-4 border border-border shadow-sm flex-1 mr-2">
             <p className="text-sm text-muted-foreground mb-1">Total Rides</p>
-            <p className="text-2xl font-bold">{mockRideHistory.length}</p>
+            <p className="text-2xl font-bold">{total_rides?.length}</p>
           </div>
           
-          <Button variant="outline" size="icon" className="h-12 w-12">
+          {/* <Button variant="outline" size="icon" className="h-12 w-12">
             <Filter className="h-5 w-5" />
-          </Button>
+          </Button> */}
         </div>
         
         <div className="space-y-6">
-          {Object.keys(ridesByDate).sort().reverse().map(date => (
-            <div key={date} className="space-y-3">
-              <div className="flex items-center gap-2">
+
+            <div className="space-y-3">
+              {/* <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <h2 className="text-sm font-medium text-muted-foreground">{formatDate(date)}</h2>
-              </div>
+                <h2 className="text-sm font-medium text-muted-foreground">{}</h2>
+              </div> */}
               
               <div className="space-y-3">
-                {ridesByDate[date].map(ride => (
+                {total_rides.map(ride => (
                   <div 
                     key={ride.id} 
                     className="bg-card rounded-lg p-4 border border-border shadow-sm"
-                    onClick={() => navigate(`/rides/${ride.id}`)}
+                   
                   >
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold">{ride.passengerName}</h3>
@@ -128,7 +79,7 @@ const TotalRidesPage = () => {
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {ride.status}
+                        {ride?.status}
                       </span>
                     </div>
                     
@@ -142,11 +93,11 @@ const TotalRidesPage = () => {
                         <div className="space-y-3 flex-1">
                           <div>
                             <p className="text-xs text-muted-foreground">Pickup</p>
-                            <p className="text-sm">{ride.pickupLocation}</p>
+                            <p className="text-sm">{ride?.pickup_location}</p>
                           </div>
                           <div>
                             <p className="text-xs text-muted-foreground">Dropoff</p>
-                            <p className="text-sm">{ride.dropLocation}</p>
+                            <p className="text-sm">{ride?.drop_location}</p>
                           </div>
                         </div>
                       </div>
@@ -155,18 +106,18 @@ const TotalRidesPage = () => {
                     <div className="flex justify-between items-center pt-2 border-t border-border">
                       <div>
                         <p className="text-xs text-muted-foreground">Time</p>
-                        <p className="text-sm font-medium">{ride.time}</p>
+                        <p className="text-sm font-medium">{ moment(ride.pickup_date).format("MMMM D, YYYY h:mm A")}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs text-muted-foreground">Fare</p>
-                        <p className="text-sm font-medium">${ride.fare.toFixed(2)}</p>
+                        <p className="text-sm font-medium">${ride?.bid_amount}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
+          
         </div>
       </main>
       

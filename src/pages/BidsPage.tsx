@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { bids as mockBids } from '@/data/mockData';
 import BidCard from '@/components/rides/BidCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { toast } from '@/hooks/use-toast';
-
+import useAxios from '../hooks/useAxios'
+import { getBidsDataDriver } from '../urls/urls';
 const BidsPage = () => {
-  const [bids, setBids] = useState(mockBids);
+  const [bids, setBids] = useState([]);
+  const[bidsData,bidsDataError,bidsDataLoading,bidsDataSubmit] = useAxios()  
+  useEffect(() => {
+    bidsDataSubmit(getBidsDataDriver());
+  }, []);
+  
+  useEffect(() => {
+    if (bidsData) {
+      setBids(bidsData?.data);
+    }
+  }, [bidsData]);   
+  useEffect(() => {
+    if (bidsDataError) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch bids data',
+        variant: 'destructive',
+      });
+    }
+  }, [bidsDataError]);
   
   const handleCancelBid = (bidId: string) => {
     setBids(prevBids => 
@@ -24,7 +44,7 @@ const BidsPage = () => {
       </header>
       
       <main className="p-4 space-y-4">
-        {bids.length > 0 ? (
+        {bids?.length > 0 ? (
           bids.map(bid => (
             <BidCard 
               key={bid.id} 

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { rides as mockRides } from '@/data/mockData';
 import RideCard from '@/components/rides/RideCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { toast } from '@/hooks/use-toast';
 import { Search, Car, Clock, DollarSign, Star, BarChart2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import useAxios from '../hooks/useAxios'
+import { getDashboardDataDriver, placeBidService } from '../urls/urls';
 
 // Mock statistics data (in a real app, this would come from an API)
 const mockStats = {
@@ -16,27 +18,63 @@ const mockStats = {
 };
 
 const DashboardPage = () => {
+  const[dashboardData, dashboardDataError, dashboardDataLoading, dashboardDataSubmit] = useAxios()
+  const[bidSubmitData, bidSubmitError, bidSubmitLoading, bidSubmitSubmit] = useAxios()
+const[fetchDashboardData,setFetchDashboardData] = useState(true)
   const [rides, setRides] = useState(mockRides);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   
-  const handleBidSubmit = (rideId: string, amount: number) => {
-    console.log(`Bid of $${amount} placed on ride ${rideId}`);
-    toast({
-      title: "Bid Placed",
-      description: `Your bid of $${amount} has been submitted.`,
-    });
-    // In a real app, you would send this to an API
+  const handleBidSubmit = (booking_id: string, amount: number) => {
+    bidSubmitSubmit(placeBidService({booking_id:booking_id, bid_amount:amount}))
+
   };
-  
-  const handleRideClick = (rideId: string) => {
-    navigate(`/rides/${rideId}`);
+  useEffect(()=>{
+    if(bidSubmitData && bidSubmitData?.result === 'success'){
+      toast({
+        title: "Bid Placed",
+        description: `Your bid has been submitted.`,
+      });
+      setFetchDashboardData(true)
+    } 
+  },[bidSubmitData])
+  useEffect(()=>{
+   
+    if(bidSubmitError && bidSubmitError?.response?.data?.result === 'failure'){
+      toast({
+        title: "Error",
+        description: bidSubmitError?.response?.data?.error,
+        variant: "destructive",
+      });
+    }
+  },[bidSubmitError])
+  const handleRideClick = (booking_id: string) => {
+    navigate(`/rides/${booking_id}`);
   };
   
   const filteredRides = rides.filter(ride => 
     ride.pickupLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
     ride.dropLocation.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(()=>{
+    if(fetchDashboardData){
+    dashboardDataSubmit(getDashboardDataDriver())
+    setFetchDashboardData(false)
+    }
+  },[fetchDashboardData])
+
+  useEffect(()=>{
+    if(dashboardDataError){
+   toast({
+    title: "Error",
+    description: dashboardDataError?.response?.data?.error?
+    dashboardDataError?.response?.data?.error
+    :"Dashboard data not found",
+    variant: "destructive",
+   })
+  }
+  },[dashboardDataError])
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -55,46 +93,49 @@ const DashboardPage = () => {
         <section className="grid grid-cols-2 gap-4">
           <div 
             className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate('/ongoing-rides')}
+            onClick={() => navigate('/ongoing-rides',{state:{ongoing_rides:dashboardData?.ongoing_rides}})}
           >
             <div className="flex items-center gap-2">
               <Car className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Ongoing Rides</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.ongoingRides}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.ongoing_rides?dashboardData?.ongoing_rides?.length:'0'}</p>
           </div>
           
           <div 
             className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate('/total-rides')}
+            onClick={() => navigate('/total-rides',{state:{total_rides:dashboardData?.total_rides}})}
           >
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Rides</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.totalRides}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.total_rides?dashboardData?.total_rides.length:'0'}</p>
           </div>
           
           <div 
             className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate('/total-bids')}
+            onClick={() => navigate('/total-bids',{state:{total_bids:dashboardData?.total_bids}})}
           >
             <div className="flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Bids</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.totalBids}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.total_bids?dashboardData?.total_bids.length:'0'}</p>
           </div>
           
           <div 
             className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate('/ratings')}
+            onClick={() => navigate('/ratings',{state:{ratings:dashboardData?.ratings,
+              average_rating:dashboardData?.average_rating,
+              ratingDistribution:dashboardData?.ratingDistribution
+            }})}
           >
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Rating</h3>
             </div>
-            <p className="text-2xl font-bold mt-2">{mockStats.averageRating}</p>
+            <p className="text-2xl font-bold mt-2">{dashboardData?.average_rating?dashboardData?.average_rating:'0'}</p>
           </div>
         </section>
         
@@ -125,7 +166,7 @@ const DashboardPage = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Available Rides for Bidding</h2>
           </div>
-          
+{/*           
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
@@ -135,11 +176,11 @@ const DashboardPage = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full py-2 pl-10 pr-4 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
-          </div>
+          </div> */}
           
           <div className="space-y-4">
-            {filteredRides.length > 0 ? (
-              filteredRides.map(ride => (
+            { !dashboardDataLoading && dashboardData?.booking  ? (
+              dashboardData?.booking.map((ride:any) => (
                 <RideCard 
                   key={ride.id} 
                   ride={ride} 

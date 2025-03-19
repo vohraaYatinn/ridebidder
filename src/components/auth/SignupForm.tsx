@@ -1,11 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import { toast } from '@/hooks/use-toast';
 import { User, Phone, Upload, Car, Check, MessageSquare } from 'lucide-react';
+import useAxios from '@/hooks/useAxios'
+import { sendOtpService,verifyOtpService,signupDriverService } from '@/urls/urls'
 
 const SignupForm = () => {
+  const[otpResponse, otpError, otpLoading,otpSubmit] = useAxios()
+  const[otpVerifyResponse, otpVerifyError, otpVerifyLoading,otpVerifySubmit] = useAxios()
+  const[signupDriverResponse, signupDriverError, signupDriverLoading,signupDriverSubmit] = useAxios()
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: Basic Info, 2: OTP Verification, 3: Document Upload
@@ -13,18 +19,26 @@ const SignupForm = () => {
   // Basic Info
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [vehicleType, setVehicleType] = useState('car');
-  const [vehicleModel, setVehicleModel] = useState('');
-  const [vehicleYear, setVehicleYear] = useState('');
+  // const [vehicleType, setVehicleType] = useState('car');
+  // const [vehicleModel, setVehicleModel] = useState('');
+  // const [vehicleYear, setVehicleYear] = useState('');
   
   // OTP Verification
   const [otp, setOtp] = useState('');
   
   // Document Upload
   const [driverLicense, setDriverLicense] = useState<File | null>(null);
-  const [vehicleRegistration, setVehicleRegistration] = useState<File | null>(null);
+  const [AddharCard, setAddharCard] = useState<File | null>(null);
   const [insuranceDoc, setInsuranceDoc] = useState<File | null>(null);
+  const sendOtp = ()=>{
 
+    otpSubmit(sendOtpService({'phone':phoneNumber}))
+  }
+
+  const verifyOtp = ()=>{
+
+    otpVerifySubmit(verifyOtpService({'otp':otp}))
+  }
   const handleBasicInfoSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -36,20 +50,54 @@ const SignupForm = () => {
       });
       return;
     }
+    else if (phoneNumber.length === 10 && name){
+      sendOtp()
+    }
     
-    setIsLoading(true);
-    
-    // Simulate OTP sending
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep(2);
+
+  };
+    useEffect(()=>{
+      if(otpResponse.result==='success'){
+        setStep(2);
+        toast({
+          title: "Success",
+          description: `OTP sent to ${phoneNumber}`,
+          variant: "default",
+        });
+      }
+
+    },[otpResponse])
+  
+
+  useEffect(()=>{
+    toast({
+      title: "Error",
+      description: `OTP not sent to ${phoneNumber}`,
+      variant: "destructive",
+    });
+  },[otpError])
+
+  useEffect(()=>{
+    if(otpVerifyResponse.result==='success'){
+      setStep(3);
       toast({
         title: "Success",
-        description: `OTP sent to ${phoneNumber}`,
+        description: `Phone Number Verified Successfully`,
         variant: "default",
       });
-    }, 1500);
-  };
+    }
+
+  },[otpVerifyResponse])
+
+
+useEffect(()=>{
+  toast({
+    title: "Error",
+    description: `Invalid OTP`,
+    variant: "destructive",
+  });
+},[otpVerifyError])
+
 
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,25 +110,17 @@ const SignupForm = () => {
       });
       return;
     }
+    else if (otp.length===4){
+      verifyOtp()
+    }
     
-    setIsLoading(true);
-    
-    // Simulate OTP verification
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep(3);
-      toast({
-        title: "Success",
-        description: "Phone number verified successfully",
-        variant: "default",
-      });
-    }, 1500);
+
   };
 
   const handleDocumentUpload = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!driverLicense || !vehicleRegistration || !insuranceDoc) {
+    if (!driverLicense || !AddharCard) {
       toast({
         title: "Error",
         description: "Please upload all required documents",
@@ -88,29 +128,46 @@ const SignupForm = () => {
       });
       return;
     }
-    
-    setIsLoading(true);
-    
-    // Simulate document upload and account creation
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Success",
-        description: "Account created successfully",
-        variant: "default",
-      });
-      navigate('/dashboard');
-    }, 2000);
+    else if (driverLicense && AddharCard){
+      signupDriver()
+    }
+
   };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>, 
     setFile: React.Dispatch<React.SetStateAction<File | null>>
   ) => {
+    console.log(e.target.files[0])
     if (e.target.files && e.target.files[0]) {
+      console.log('from file change',e.target.files[0])
       setFile(e.target.files[0]);
     }
   };
+  const signupDriver = ()=>{
+    signupDriverSubmit(signupDriverService({'name':name,'phone_number':phoneNumber,'license_doc':driverLicense,'aadhaar_doc':AddharCard}))
+  }
+  useEffect(()=>{
+    if(signupDriverResponse.result==='success'){
+      navigate('/dashboard')
+      toast({
+        title: "Success",
+        description: "Driver signed up successfully",
+        variant: "default",
+      });
+    }
+  },[signupDriverResponse])
+
+  useEffect(()=>{
+    console.log(signupDriverError?.response?.data?.error)
+    toast({
+      title: "Error",
+      description: signupDriverError?.response?.data?.error?
+      signupDriverError?.response?.data?.error
+      :"Driver signup failed",
+      variant: "destructive",
+    });
+  },[signupDriverError])
 
   const renderBasicInfoForm = () => (
     <form onSubmit={handleBasicInfoSubmit} className="space-y-4">
@@ -146,7 +203,7 @@ const SignupForm = () => {
         />
       </div>
       
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <label htmlFor="vehicleType" className="text-sm font-medium flex items-center gap-2">
           <Car className="h-4 w-4" />
           Vehicle Type
@@ -163,9 +220,9 @@ const SignupForm = () => {
           <option value="van">Van</option>
           <option value="truck">Truck</option>
         </select>
-      </div>
+      </div> */}
       
-      <div className="grid grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="vehicleModel" className="text-sm font-medium">
             Vehicle Model
@@ -195,12 +252,12 @@ const SignupForm = () => {
             required
           />
         </div>
-      </div>
+      </div> */}
       
       <Button
         type="submit"
         className="w-full transition-all duration-300 transform hover:translate-y-[-2px]"
-        isLoading={isLoading}
+        isLoading={otpLoading}
       >
         Continue
       </Button>
@@ -250,7 +307,7 @@ const SignupForm = () => {
       <Button
         type="submit"
         className="w-full transition-all duration-300 transform hover:translate-y-[-2px]"
-        isLoading={isLoading}
+        isLoading={otpVerifyLoading}
       >
         Verify
       </Button>
@@ -301,31 +358,31 @@ const SignupForm = () => {
           <Upload className="h-4 w-4" />
           Vehicle Registration
         </label>
-        <div className={`border-2 border-dashed rounded-lg p-4 text-center ${vehicleRegistration ? 'border-green-500' : 'border-border'}`}>
-          {vehicleRegistration ? (
+        <div className={`border-2 border-dashed rounded-lg p-4 text-center ${AddharCard ? 'border-green-500' : 'border-border'}`}>
+          {AddharCard ? (
             <div className="flex items-center justify-center gap-2 text-green-500">
               <Check className="h-4 w-4" />
-              <span>{vehicleRegistration.name}</span>
+              <span>{AddharCard.name}</span>
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Upload your vehicle registration</p>
-              <label htmlFor="vehicleRegistration" className="cursor-pointer px-4 py-2 bg-secondary text-foreground rounded-lg inline-block text-sm hover:bg-secondary/80 transition-colors">
+              <p className="text-sm text-muted-foreground">Upload your AddharCard</p>
+              <label htmlFor="AddharCard" className="cursor-pointer px-4 py-2 bg-secondary text-foreground rounded-lg inline-block text-sm hover:bg-secondary/80 transition-colors">
                 Choose File
               </label>
             </div>
           )}
           <input
-            id="vehicleRegistration"
+            id="AddharCard"
             type="file"
             accept="image/*,.pdf"
-            onChange={(e) => handleFileChange(e, setVehicleRegistration)}
+            onChange={(e) => handleFileChange(e, setAddharCard)}
             className="hidden"
           />
         </div>
       </div>
       
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <label className="text-sm font-medium flex items-center gap-2">
           <Upload className="h-4 w-4" />
           Insurance Document
@@ -352,12 +409,12 @@ const SignupForm = () => {
             className="hidden"
           />
         </div>
-      </div>
+      </div> */}
       
       <Button
         type="submit"
         className="w-full transition-all duration-300 transform hover:translate-y-[-2px]"
-        isLoading={isLoading}
+        isLoading={signupDriverLoading}
       >
         Complete Registration
       </Button>

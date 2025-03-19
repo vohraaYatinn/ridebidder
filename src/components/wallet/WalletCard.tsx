@@ -21,7 +21,7 @@ const WalletCard = ({ balance, totalEarnings }: WalletCardProps) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Current Balance</p>
-              <p className="text-2xl font-bold">${balance.toFixed(2)}</p>
+              <p className="text-2xl font-bold">${balance}</p>
             </div>
             <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center">
               <CreditCard className="h-6 w-6 text-primary" />
@@ -29,13 +29,13 @@ const WalletCard = ({ balance, totalEarnings }: WalletCardProps) => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="p-3 bg-green-500/10 rounded-lg">
             <div className="flex items-center mb-1">
               <ArrowUp className="h-4 w-4 text-green-500 mr-1" />
               <p className="text-xs text-green-500">Income</p>
             </div>
-            <p className="text-lg font-semibold">${totalEarnings.toFixed(2)}</p>
+            <p className="text-lg font-semibold">${totalEarnings}</p>
           </div>
           
           <div className="p-3 bg-red-500/10 rounded-lg">
@@ -43,11 +43,11 @@ const WalletCard = ({ balance, totalEarnings }: WalletCardProps) => {
               <ArrowDown className="h-4 w-4 text-red-500 mr-1" />
               <p className="text-xs text-red-500">Paid Out</p>
             </div>
-            <p className="text-lg font-semibold">${(totalEarnings - balance).toFixed(2)}</p>
+            <p className="text-lg font-semibold">${(totalEarnings - balance)}</p>
           </div>
         </div>
         
-        <Button className="w-full">Add Funds</Button>
+        <Button className="w-full">Add Funds</Button> */}
       </CardContent>
     </Card>
   );

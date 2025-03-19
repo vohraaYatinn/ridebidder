@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ReviewList from '@/components/profile/ReviewList';
@@ -7,9 +7,26 @@ import Button from '@/components/common/Button';
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import useAxios from '../hooks/useAxios'
+import { getProfileDataDriver } from '../urls/urls';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const[profileData,profileDataError,profileDataLoading,profileDataSubmit] = useAxios()  
+  useEffect(() => {
+    profileDataSubmit(getProfileDataDriver());
+  }, []);
+  useEffect(() => {
+    if (profileDataError) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch profile data',
+        variant: 'destructive', 
+      });
+    }
+  }, [profileDataError]);
+  
+
   
   const handleLogout = () => {
     // Simulate logout
@@ -41,9 +58,9 @@ const ProfilePage = () => {
       </header>
       
       <main className="p-4 space-y-6">
-        <ProfileHeader profile={userProfile} />
+        <ProfileHeader profile={profileData?.data?profileData?.data[0]:[]} />
         
-        <ReviewList reviews={reviews} />
+        {/* <ReviewList reviews={reviews} /> */}
       </main>
       
       <BottomNavigation />
