@@ -2,7 +2,6 @@
 
 import { HttpAxiosService } from './httpService';
 import { Urls } from './constantsUrls.jsx';
-import { test_url } from "../../src/config/environment.js"
 
 const project = new HttpAxiosService('http://127.0.0.1:8000/');
 
