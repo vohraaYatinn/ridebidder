@@ -32,7 +32,7 @@ const SignupForm = () => {
   const [insuranceDoc, setInsuranceDoc] = useState<File | null>(null);
   const sendOtp = ()=>{
 
-    otpSubmit(sendOtpService({'phone':phoneNumber}))
+    otpSubmit(sendOtpService({'phone':phoneNumber, "screen_type":"register"}))
   }
 
   const verifyOtp = ()=>{

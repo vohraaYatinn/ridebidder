@@ -100,7 +100,7 @@ toast({
 
 const sendOtp = ()=>{
 
-  otpSubmit(sendOtpService({'phone':phoneNumber}))
+  otpSubmit(sendOtpService({'phone':phoneNumber, "screen_type":"login"}))
 }
 
 const verifyOtp = ()=>{
