@@ -11,7 +11,7 @@ const LoginForm = () => {
   const[otpResponse, otpError, otpLoading,otpSubmit] = useAxios()
   const[otpVerifyResponse, otpVerifyError, otpVerifyLoading,otpVerifySubmit] = useAxios()
   const navigate = useNavigate();
-
+  const [verificationCode, setVerificationCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [otp, setOtp] = useState('');
@@ -48,14 +48,12 @@ const LoginForm = () => {
     else if (otp.length===4){
       verifyOtp()
     }
-    
-
-    
-
   };
   useEffect(()=>{
     if(otpResponse.result==='success'){
       setShowOtpInput(true);
+      console.log(otpResponse)
+      setVerificationCode(otpResponse?.data?.data?.verificationId)
       toast({
         title: "Success",
         description: `OTP sent to ${phoneNumber}`,
@@ -64,7 +62,6 @@ const LoginForm = () => {
     }
 
   },[otpResponse])
-
 
 useEffect(()=>{
   toast({
@@ -77,7 +74,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   if(otpVerifyResponse.result==='success'){
-    const token = otpVerifyResponse['access']; 
+    const token = otpVerifyResponse['access'];
     localStorage.setItem("token", token);
     navigate('/dashboard')
     toast({
@@ -89,7 +86,6 @@ useEffect(()=>{
 
 },[otpVerifyResponse])
 
-
 useEffect(()=>{
 toast({
   title: "Error",
@@ -99,13 +95,11 @@ toast({
 },[otpVerifyError])
 
 const sendOtp = ()=>{
-
   otpSubmit(sendOtpService({'phone':phoneNumber, "screen_type":"login"}))
 }
 
 const verifyOtp = ()=>{
-
-  otpVerifySubmit(verifyOtpService({'otp':otp,'phone':phoneNumber}))
+  otpVerifySubmit(verifyOtpService({'otp':otp,'phone':phoneNumber,"verification_code": verificationCode}))
 }
   return (
     <div className="space-y-4 w-full max-w-sm">
