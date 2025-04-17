@@ -7,6 +7,7 @@ import useAxios from '../hooks/useAxios'
 import { getBidsDataDriver } from '../urls/urls';
 const BidsPage = () => {
   const [bids, setBids] = useState([]);
+  const [fetch,setFetch] = useState(false)
   const[bidsData,bidsDataError,bidsDataLoading,bidsDataSubmit] = useAxios()  
   useEffect(() => {
     bidsDataSubmit(getBidsDataDriver());
@@ -50,6 +51,7 @@ const BidsPage = () => {
               key={bid.id} 
               bid={bid} 
               onCancel={handleCancelBid}
+              setFetch={setFetch}
             />
           ))
         ) : (
