@@ -64,12 +64,15 @@ const LoginForm = () => {
   },[otpResponse])
 
 useEffect(()=>{
-  toast({
-    title: "Error",
-    description:otpError?.response?.data?.error?
-    otpError?.response?.data?.error :`OTP not sent to ${phoneNumber}`,
-    variant: "destructive",
-  });
+  if(otpError?.status){
+    toast({
+      title: "Error",
+      description:otpError?.response?.data?.error?
+      otpError?.response?.data?.error :`OTP not sent to ${phoneNumber}`,
+      variant: "destructive",
+    });
+  }
+
 },[otpError])
 
 useEffect(()=>{
@@ -87,11 +90,14 @@ useEffect(()=>{
 },[otpVerifyResponse])
 
 useEffect(()=>{
-toast({
-  title: "Error",
-  description: `Invalid OTP`,
-  variant: "destructive",
-});
+  if(otpVerifyError?.status){
+    toast({
+      title: "Error",
+      description: `Invalid OTP`,
+      variant: "destructive",
+    });
+  }
+
 },[otpVerifyError])
 
 const sendOtp = ()=>{

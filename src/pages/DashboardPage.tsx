@@ -3,7 +3,7 @@ import { rides as mockRides } from '@/data/mockData';
 import RideCard from '@/components/rides/RideCard';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { toast } from '@/hooks/use-toast';
-import { Search, Car, Clock, DollarSign, Star, BarChart2 } from 'lucide-react';
+import { Search, Car, Clock, DollarSign, Star, BarChart2, IndianRupee } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '../hooks/useAxios'
 import { getDashboardDataDriver, placeBidService } from '../urls/urls';
@@ -118,7 +118,7 @@ const[fetchDashboardData,setFetchDashboardData] = useState(true)
             onClick={() => navigate('/total-bids',{state:{total_bids:dashboardData?.total_bids}})}
           >
             <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-primary" />
+              <IndianRupee className="h-5 w-5 text-primary" />
               <h3 className="font-medium">Total Bids</h3>
             </div>
             <p className="text-2xl font-bold mt-2">{dashboardData?.total_bids?dashboardData?.total_bids.length:'0'}</p>
@@ -138,29 +138,8 @@ const[fetchDashboardData,setFetchDashboardData] = useState(true)
             <p className="text-2xl font-bold mt-2">{dashboardData?.average_rating?dashboardData?.average_rating:'0'}</p>
           </div>
         </section>
-        
-        {/* Earnings Graph */}
-        <section className="bg-card rounded-lg p-4 border border-border shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Recent Earnings</h2>
-            <BarChart2 className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <div className="h-40 flex items-end gap-2">
-            {mockStats.recentEarnings.map((earning, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center">
-                <div 
-                  className="w-full bg-primary/80 rounded-t-sm transition-all duration-300" 
-                  style={{ height: `${(earning / Math.max(...mockStats.recentEarnings)) * 80}%` }}
-                ></div>
-                <span className="text-xs text-muted-foreground mt-1">
-                  {['M', 'T', 'W', 'T', 'F', 'S', 'S'][index]}
-                </span>
-                <span className="text-xs font-medium">${earning}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-        
+       
+       
         {/* Available Rides for Bidding */}
         <section>
           <div className="flex items-center justify-between mb-4">

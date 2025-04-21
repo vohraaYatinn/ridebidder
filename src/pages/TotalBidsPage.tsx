@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { ArrowLeft, DollarSign, CheckCircle, XCircle, Clock, IndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BottomNavigation from '@/components/common/BottomNavigation';
@@ -41,7 +41,7 @@ const TotalBidsPage = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-primary" />
+            <IndianRupee className="h-5 w-5 text-primary" />
             <h1 className="text-xl font-bold">Your Bids</h1>
           </div>
         </div>

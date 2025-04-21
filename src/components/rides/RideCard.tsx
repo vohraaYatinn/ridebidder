@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../common/Card';
 import { Ride } from '@/data/mockData';
-import { Clock, MapPin, User, Navigation, DollarSign } from 'lucide-react';
+import { Clock, MapPin, User, Navigation, DollarSign, IndianRupee } from 'lucide-react';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { toast } from '@/hooks/use-toast';
@@ -128,7 +128,7 @@ const RideCard = ({ride, onBidSubmit, onClick }) => {
               <span className="text-sm">{ride.trip_km}</span>
             </div>
             <div className="flex items-center">
-              <DollarSign className="mr-2 h-4 w-4 text-blue-400" />
+              <IndianRupee className="mr-2 h-4 w-4 text-blue-400" />
               <span className="text-sm">${ride.trip_type}</span>
             </div>
           </div>

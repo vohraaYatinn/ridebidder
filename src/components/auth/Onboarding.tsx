@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
-import { ChevronRight, MapPin, Clock, DollarSign, Star, Car, Navigation, MapIcon, Users } from 'lucide-react';
+import { ChevronRight, MapPin, Clock, DollarSign, Star, Car, Navigation, MapIcon, Users, IndianRupee } from 'lucide-react';
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const Onboarding = () => {
       description: "Get the best routes with real-time traffic updates for efficient pickups and drop-offs."
     },
     {
-      icon: <DollarSign size={48} className="text-primary" />,
+      icon: <IndianRupee size={48} className="text-primary" />,
       title: "Competitive Earnings",
       description: "Set your own prices and maximize your earning potential."
     }

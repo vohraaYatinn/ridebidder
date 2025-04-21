@@ -9,6 +9,8 @@ const BottomNavigation = () => {
   
   const navigationItems = [
     { name: 'Home', path: '/dashboard', icon: Home },
+    { name: 'Bids', path: '/bids', icon: Clock },
+
     { name: 'Wallet', path: '/wallet', icon: Wallet },
     { name: 'Profile', path: '/profile', icon: User },
   ];
