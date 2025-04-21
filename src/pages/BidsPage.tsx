@@ -11,7 +11,7 @@ const BidsPage = () => {
   const[bidsData,bidsDataError,bidsDataLoading,bidsDataSubmit] = useAxios()  
   useEffect(() => {
     bidsDataSubmit(getBidsDataDriver());
-  }, []);
+  }, [fetch]);
   
   useEffect(() => {
     if (bidsData) {
