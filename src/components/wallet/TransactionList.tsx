@@ -8,7 +8,9 @@ import  moment  from 'moment';
 
 const TransactionList = ({ transactions }) => {
   return (
-    <Card variant="glass" className="w-full animate-scale-in">
+    <Card variant="glass" className="w-full animate-scale-in" style={{
+      marginTop:"0rem"
+    }}>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
       </CardHeader>

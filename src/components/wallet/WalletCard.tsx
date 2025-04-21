@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../common/Card';
 import { ArrowDown, ArrowUp, CreditCard } from 'lucide-react';
@@ -17,14 +16,14 @@ const WalletCard = ({ balance, totalEarnings }: WalletCardProps) => {
       </CardHeader>
       
       <CardContent className="pt-2">
-        <div className="p-4 bg-primary/10 rounded-lg mb-4">
+        <div className="p-4 bg-primary/5 rounded-lg mb-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Current Balance</p>
-              <p className="text-2xl font-bold text-green-500">Total Earning ₹{totalEarnings}</p>
-              <p className="text-2xl font-bold text-red-500">Total To Pay ₹{balance}</p>
+              <p className="text-2xl font-bold text-primary">₹{totalEarnings}</p>
+              <p className="text-sm text-muted-foreground">Total To Pay: ₹{balance}</p>
             </div>
-            <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center">
+            <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
               <CreditCard className="h-6 w-6 text-primary" />
             </div>
           </div>
