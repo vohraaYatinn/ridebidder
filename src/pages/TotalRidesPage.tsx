@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import moment from "moment";
-
-// Mock data (in a real app, this would come from an API)
+import useAxios from '@/hooks/useAxios';
+import { endTrip,collectPayment } from '@/urls/urls';
+import Modal from '@/components/common/Modal';
+import { toast } from '@/hooks/use-toast';
 
 
 const TotalRidesPage = () => {
+  const [collectResponse, collectError, collectLoading, collectSubmit] = useAxios();
   const navigate = useNavigate();
   const location = useLocation();
   const { total_rides } = location.state || {}
+  const [showModal, setShowModal] = useState(false);
+  
   // Group rides by date
   // const ridesByDate = total_rides.reduce((acc, ride) => {
   //   if (!acc[ride.date]) {
@@ -26,7 +31,23 @@ const TotalRidesPage = () => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
   };
+  const handleCollect = (booking_id) => {
+    collectSubmit(collectPayment({booking_id:booking_id}))
+    setShowModal(false);
 
+  };
+
+  useEffect(()=>{
+    if(collectResponse && collectResponse?.['message'] =='success'){
+      toast({
+        title: "Payment Collected",
+        description: "Success.",
+        variant: "default",
+      });
+
+      navigate('/dashboard')
+    }
+  },[collectResponse])
   return (
     <div className="min-h-screen bg-background pb-20">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border p-4">
@@ -109,10 +130,29 @@ const TotalRidesPage = () => {
                         <p className="text-sm font-medium">{ moment(ride.pickup_date).format("MMMM D, YYYY h:mm A")}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-muted-foreground">Fare</p>
-                        <p className="text-sm font-medium">${ride?.bid_amount}</p>
+                        <p className="text-xs text-muted-foreground">Bid Ammount</p>
+                        <p className="text-sm font-medium">₹{ride?.bids[0].bid_amount}</p>
                       </div>
-                    </div>
+                      </div>
+                      {ride?.extra_fare>0?<>
+                        <div className="flex justify-between items-center pt-2 border-t border-border">
+                        <div>
+                        <p className="text-xs text-muted-foreground">Extra KM</p>
+                        <p className="text-sm font-medium">₹{ride?.extra_trip_km}</p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Total Extra Amount</p>
+                        <p className="text-sm font-medium">₹{ride?.extra_fare}</p>
+                      </div>
+                      </div>
+                   {!ride?.is_extra_fare_paid?   <Button disabled={collectLoading}className="w-full" onClick={()=>{handleCollect(ride?.id)}}>
+            Collect 
+          </Button>:<></>}
+                      
+                      </>
+                      :<></>}
+                    
                   </div>
                 ))}
               </div>

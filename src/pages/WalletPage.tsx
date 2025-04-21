@@ -33,8 +33,8 @@ const WalletPage = () => {
       
       <main className="p-4 space-y-6">
         <WalletCard 
-          balance={walletData?.total} 
-          totalEarnings={walletData?.total}
+          balance={walletData?.amount_give} 
+          totalEarnings={walletData?.amount_recieve}
         />
         
         <TransactionList transactions={walletData?.payments} />

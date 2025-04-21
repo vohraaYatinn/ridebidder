@@ -26,24 +26,30 @@ const TransactionList = ({ transactions }) => {
                     ? 'bg-green-500/10 text-green-500'
                     : 'bg-red-500/10 text-red-500'
                 }`}>
-                  {true ? (
+                  {/* {true ? (
                     <ArrowUp className="h-5 w-5" />
                   ) : (
                     <ArrowDown className="h-5 w-5" />
-                  )}
+                  )} */}
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium">booking id: {transaction?.booking}</p>
+                  <p className="text-sm font-medium">{transaction?.is_admin? (transaction?.amount_received>0?'Admin Sended':transaction?.amount_to_pay?'Admin Collected':''): (`booking id: ${transaction?.booking}`)}</p>
                   <p className="text-xs text-muted-foreground">{moment(transaction?.timestamp).format('DD-MM-YYYY')}</p>
                 </div>
               </div>
-              <p className={`font-medium ${
-                true
-                  ? 'text-green-500'
-                  : 'text-red-500'
-              }`}>
-                {true ? '+' : '-'}${transaction?.net_amount}
-              </p>
+{              
+       !transaction?.is_admin?
+       <> <p className={'font-medium text-green-500'}>
+       { '+' }₹{transaction?.amount_received}
+  
+     </p>
+     <p className={'font-medium text-red-500'}>
+    
+       {'-'}₹{transaction?.amount_to_pay}
+     </p></>:     <p className={'font-medium text-yellow-500'}>
+    
+    {}₹{transaction?.amount_to_pay>0?transaction?.amount_to_pay:transaction?.amount_received}
+  </p>    }
             </div>
           ))}
         </div>

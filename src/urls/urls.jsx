@@ -14,7 +14,7 @@ export const sendOtpService = (payload_data) => {
 };
 
 export const signupDriverService = (payload_data) => {  
-  return project.post(Urls.SIGNUP_DRIVER , payload_data);
+  return project.multiPartFormData(Urls.SIGNUP_DRIVER , payload_data);
 };
 
 export const verifyOtpService = (payload_data) => {
@@ -40,4 +40,13 @@ export const getWalletDataDriver = (payload_data) => {
 export const getProfileDataDriver = (payload_data) => {
   return project.get(Urls.GET_PROFILE_DATA_DRIVER , payload_data);
 };  
+export const startTrip = (payload_data) => {
+  return project.multiPartFormData(Urls.START_TRIP , payload_data);
+};
+export const endTrip = (payload_data) => {
+  return project.multiPartFormData(Urls.END_TRIP , payload_data);
+};
+export const collectPayment = (payload_data) => {
+  return project.multiPartFormData(Urls.COLLECT_PAYMENT , payload_data);
+};
 

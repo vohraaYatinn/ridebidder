@@ -21,7 +21,8 @@ const WalletCard = ({ balance, totalEarnings }: WalletCardProps) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Current Balance</p>
-              <p className="text-2xl font-bold">${balance}</p>
+              <p className="text-2xl font-bold text-green-500">Total Earning ₹{totalEarnings}</p>
+              <p className="text-2xl font-bold text-red-500">Total To Pay ₹{balance}</p>
             </div>
             <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center">
               <CreditCard className="h-6 w-6 text-primary" />

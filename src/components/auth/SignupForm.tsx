@@ -29,6 +29,8 @@ const SignupForm = () => {
   // Document Upload
   const [driverLicense, setDriverLicense] = useState<File | null>(null);
   const [AddharCard, setAddharCard] = useState<File | null>(null);
+  const [AddharCardNumber, setAddharCardNumber] = useState('')
+  const [driverLicenseNumber, setdriverLicenseNumber] = useState('')
   const [insuranceDoc, setInsuranceDoc] = useState<File | null>(null);
   const sendOtp = ()=>{
 
@@ -119,8 +121,8 @@ useEffect(()=>{
 
   const handleDocumentUpload = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!driverLicense || !AddharCard) {
+    console.log(AddharCardNumber,driverLicenseNumber)
+    if (!driverLicense || !AddharCard || !AddharCardNumber || !driverLicenseNumber) {
       toast({
         title: "Error",
         description: "Please upload all required documents",
@@ -128,7 +130,7 @@ useEffect(()=>{
       });
       return;
     }
-    else if (driverLicense && AddharCard){
+    else if (driverLicense && AddharCard && AddharCardNumber && driverLicenseNumber){
       signupDriver()
     }
 
@@ -145,7 +147,7 @@ useEffect(()=>{
     }
   };
   const signupDriver = ()=>{
-    signupDriverSubmit(signupDriverService({'name':name,'phone_number':phoneNumber,'license_doc':driverLicense,'aadhaar_doc':AddharCard}))
+    signupDriverSubmit(signupDriverService({'name':name,'phone_number':phoneNumber,'license_doc':driverLicense,'aadhaar_doc':AddharCard ,license_number:driverLicenseNumber,aadhaar_number:AddharCardNumber}))
   }
   useEffect(()=>{
     if(signupDriverResponse.result==='success'){
@@ -324,6 +326,20 @@ useEffect(()=>{
 
   const renderDocumentUploadForm = () => (
     <form onSubmit={handleDocumentUpload} className="space-y-4">
+            <div className="space-y-2">
+  <label htmlFor="AddharCard" className="text-sm font-medium flex items-center gap-2">
+    <Upload className="h-4 w-4" />
+    Driver's License Number
+  </label>
+  <input
+    id="driverLicenseNumber"
+    type="text"
+    value={driverLicenseNumber}
+    onChange={(e) => setdriverLicenseNumber(e.target.value)}
+    placeholder="Enter your Aadhar number"
+    className="w-full border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+  />
+</div>
       <div className="space-y-2">
         <label className="text-sm font-medium flex items-center gap-2">
           <Upload className="h-4 w-4" />
@@ -352,11 +368,25 @@ useEffect(()=>{
           />
         </div>
       </div>
+      <div className="space-y-2">
+  <label htmlFor="AddharCard" className="text-sm font-medium flex items-center gap-2">
+    <Upload className="h-4 w-4" />
+    AadharCard Number
+  </label>
+  <input
+    id="AddharCardNumber"
+    type="number"
+    value={AddharCardNumber}
+    onChange={(e) => setAddharCardNumber(e.target.value)}
+    placeholder="Enter your Aadhar number"
+    className="w-full border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+  />
+</div>
       
       <div className="space-y-2">
         <label className="text-sm font-medium flex items-center gap-2">
           <Upload className="h-4 w-4" />
-          Vehicle Registration
+          AddharCard
         </label>
         <div className={`border-2 border-dashed rounded-lg p-4 text-center ${AddharCard ? 'border-green-500' : 'border-border'}`}>
           {AddharCard ? (
