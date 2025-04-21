@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { rides as mockRides } from '@/data/mockData';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, MapPin, Clock, DollarSign, User } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, DollarSign, User, IndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -101,7 +101,7 @@ const RideDetailPage = () => {
               </div>
               
               <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <IndianRupee className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm text-muted-foreground">Estimated Fare</p>
                   <p className="font-medium">${ride.estimatedFare}</p>
@@ -139,10 +139,10 @@ const RideDetailPage = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="bidAmount" className="block text-sm font-medium mb-1">
-                Your Bid Amount ($)
+                Your Bid Amount (₹)
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <IndianRupee className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="bidAmount"
                   type="number"
