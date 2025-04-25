@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { MapPin, Navigation, IndianRupee, Calendar, Camera, Gauge } from 'lucide-react';
+import { MapPin, Navigation, IndianRupee, Calendar, Camera, Gauge,CarTaxiFront } from 'lucide-react';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import moment from "moment";
 import useAxios from '@/hooks/useAxios';
@@ -18,6 +18,7 @@ const OngoingRidesPage = () => {
   const [endingRideId, setEndingRideId] = useState(null);
   const [meterImage, setMeterImage] = useState(null);
   const [currentKm, setCurrentKm] = useState('');
+  const [tollAmount, setTollAmount] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [extraFare, setExtraFare] = useState(0);
   const [PendingFare, setPendingFare] = useState(0);
@@ -38,7 +39,7 @@ const OngoingRidesPage = () => {
 
     setbooking_id(rideId)
 
-  tripSubmit(endTrip({end_trip_image: meterImage,end_km: currentKm,booking_id: rideId}));
+  tripSubmit(endTrip({end_trip_image: meterImage,end_km: currentKm,booking_id: rideId, toll_amount:tollAmount}));
 
   };
 useEffect(()=>{
@@ -178,6 +179,20 @@ type="number"
 value={currentKm}
 onChange={(e) => setCurrentKm(e.target.value)}
 placeholder="e.g. 14230"
+className="border px-3 py-1 rounded-md text-sm w-full"
+/>
+</div>
+<div className="flex items-center gap-2">
+<CarTaxiFront className="h-4 w-4 text-muted-foreground" />
+<label htmlFor="currentKm" className="text-sm font-medium">
+Toll Collected
+</label>
+<input
+id="currentKm"
+type="number"
+value={tollAmount}
+onChange={(e) => setTollAmount(e.target.value)}
+placeholder="e.g.₹300"
 className="border px-3 py-1 rounded-md text-sm w-full"
 />
 </div>

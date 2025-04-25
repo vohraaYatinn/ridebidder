@@ -3,13 +3,19 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, Clock, Wallet, User } from 'lucide-react';
 
-const BottomNavigation = () => {
+const BottomNavigation = ({assigned_rides_number=0}) => {
   const navigate = useNavigate();
   const location = useLocation();
   
   const navigationItems = [
     { name: 'Home', path: '/dashboard', icon: Home },
-    { name: 'Bids', path: '/bids', icon: Clock },
+    { name: <div>Rides {assigned_rides_number ? <span style={{
+      background: 'red',
+      color:"white",
+      padding:"2px",
+      border:"1px solid white",
+      borderRadius:"100px",
+    }}>{assigned_rides_number}</span>:""}</div>, path: '/bids', icon: Clock },
 
     { name: 'Wallet', path: '/wallet', icon: Wallet },
     { name: 'Profile', path: '/profile', icon: User },

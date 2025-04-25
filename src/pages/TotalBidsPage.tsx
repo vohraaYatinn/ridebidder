@@ -128,7 +128,7 @@ const TotalBidsPage = () => {
                   <div className="flex justify-between items-center pt-2 border-t border-border">
                     <div>
                       <p className="text-xs text-muted-foreground">Your Bid</p>
-                      <p className="text-sm font-medium">${bid?.bid_amount}</p>
+                      <p className="text-sm font-medium">₹ {bid?.bid_amount}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">Est.Distance</p>

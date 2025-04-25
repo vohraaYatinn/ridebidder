@@ -41,7 +41,7 @@ const BidsPage = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border p-4">
-        <h1 className="text-2xl font-bold">My Bids</h1>
+        <h1 className="text-2xl font-bold">My Rides</h1>
       </header>
       
       <main className="p-4 space-y-4">
@@ -56,7 +56,7 @@ const BidsPage = () => {
           ))
         ) : (
           <div className="text-center py-10">
-            <p className="text-muted-foreground">No bids yet</p>
+            <p className="text-muted-foreground">No Rides yet</p>
           </div>
         )}
       </main>

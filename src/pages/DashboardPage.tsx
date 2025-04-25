@@ -176,7 +176,7 @@ const[fetchDashboardData,setFetchDashboardData] = useState(true)
         </section>
       </main>
       
-      <BottomNavigation />
+      <BottomNavigation assigned_rides_number={dashboardData?.assigned_rides_number}/>
     </div>
   );
 };

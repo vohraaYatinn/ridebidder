@@ -125,11 +125,16 @@ const RideCard = ({ride, onBidSubmit, onClick }) => {
             </div> */}
             <div className="flex items-center">
               <MapPin className="mr-2 h-4 w-4 text-blue-400" />
-              <span className="text-sm">{ride.trip_km}</span>
+              <span className="text-sm">{ride.trip_km} Km</span>
             </div>
             <div className="flex items-center">
-              <IndianRupee className="mr-2 h-4 w-4 text-blue-400" />
-              <span className="text-sm">${ride.trip_type}</span>
+              <span className="text-sm">Type : <span style={{
+                fontWeight:"bold",
+              }}>{ride.trip_type == "one_way" ? "One Way" :"Round Trip"}</span>
+              
+              
+              </span>
+              <br/><p></p>
             </div>
           </div>
           

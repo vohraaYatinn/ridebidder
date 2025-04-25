@@ -27,6 +27,8 @@ const SignupForm = () => {
   const [otp, setOtp] = useState('');
   
   // Document Upload
+    const [verificationCode, setVerificationCode] = useState("");
+  
   const [driverLicense, setDriverLicense] = useState<File | null>(null);
   const [AddharCard, setAddharCard] = useState<File | null>(null);
   const [AddharCardNumber, setAddharCardNumber] = useState('')
@@ -38,8 +40,7 @@ const SignupForm = () => {
   }
 
   const verifyOtp = ()=>{
-
-    otpVerifySubmit(verifyOtpService({'otp':otp}))
+    otpVerifySubmit(verifyOtpService({'otp':otp, 'phone':phoneNumber,"verification_code": verificationCode}))
   }
   const handleBasicInfoSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +61,8 @@ const SignupForm = () => {
   };
     useEffect(()=>{
       if(otpResponse.result==='success'){
+        setVerificationCode(otpResponse?.data?.data?.verificationId)
+
         setStep(2);
         toast({
           title: "Success",
@@ -151,7 +154,7 @@ useEffect(()=>{
   }
   useEffect(()=>{
     if(signupDriverResponse.result==='success'){
-      navigate('/dashboard')
+      navigate('/login')
       toast({
         title: "Success",
         description: "Driver signed up successfully",
@@ -336,7 +339,7 @@ useEffect(()=>{
     type="text"
     value={driverLicenseNumber}
     onChange={(e) => setdriverLicenseNumber(e.target.value)}
-    placeholder="Enter your Aadhar number"
+    placeholder="Enter your License number"
     className="w-full border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
   />
 </div>
