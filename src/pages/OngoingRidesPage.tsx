@@ -140,6 +140,14 @@ useEffect(()=>{
 
               <div className="flex justify-between pt-2 border-t border-border text-sm">
                 <div>
+                  <p className="text-muted-foreground text-xs">Name</p>
+                  <p>{ride?.user?.first_name}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Number</p>
+                  <p>{ride?.user?.phone_number}</p>
+                </div>
+                <div>
                   <p className="text-muted-foreground text-xs">Started at</p>
                   <p>{moment(ride?.pickup_date).format("MMMM D, YYYY h:mm A")}</p>
                 </div>

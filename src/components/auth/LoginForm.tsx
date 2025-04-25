@@ -101,7 +101,7 @@ useEffect(()=>{
 },[otpVerifyError])
 
 const sendOtp = ()=>{
-  otpSubmit(sendOtpService({'phone':phoneNumber, "screen_type":"login"}))
+  otpSubmit(sendOtpService({'phone':phoneNumber, "screen_type":"login",'role':'driver'}))
 }
 
 const verifyOtp = ()=>{
