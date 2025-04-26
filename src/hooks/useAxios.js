@@ -42,11 +42,16 @@ const useAxios = () => {
             setResponse(res?.data);
         } catch (err) {
             setError(err);
+            if (err?.response?.status === 401) {
+               localStorage.clear()
+            }
             if (err?.response?.status === 404) {
-                // router.push('/not-found'); 
-                // setError(err);
+                localStorage.clear()
+
             }
             if (err?.response?.status === 403) {
+                localStorage.clear()
+
                 router.push("/login")
             }
             else{
