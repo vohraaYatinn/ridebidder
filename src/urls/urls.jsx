@@ -3,7 +3,7 @@
 import { HttpAxiosService } from './httpService';
 import { Urls } from './constantsUrls.jsx';
 
-const project = new HttpAxiosService('http://127.0.0.1:8000/');
+const project = new HttpAxiosService('https://api.cabmate.in/');
 
 export const login = (payload_data) => {
   return project.post(Urls.LOGIN , payload_data);
