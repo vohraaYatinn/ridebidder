@@ -75,11 +75,14 @@ const SignupForm = () => {
   
 
   useEffect(()=>{
-    toast({
-      title: "Error",
-      description: `OTP not sent to ${phoneNumber}`,
-      variant: "destructive",
-    });
+    if(otpError){
+      toast({
+        title: "Error",
+        description: `OTP not sent to ${phoneNumber}`,
+        variant: "destructive",
+      });
+    }
+
   },[otpError])
 
   useEffect(()=>{
@@ -96,11 +99,14 @@ const SignupForm = () => {
 
 
 useEffect(()=>{
+ if(otpVerifyError){
   toast({
     title: "Error",
     description: `Invalid OTP`,
     variant: "destructive",
   });
+ }
+
 },[otpVerifyError])
 
 
@@ -164,7 +170,7 @@ useEffect(()=>{
   },[signupDriverResponse])
 
   useEffect(()=>{
-    console.log(signupDriverError?.response?.data?.error)
+   if(signupDriverError?.response?.data?.error){
     toast({
       title: "Error",
       description: signupDriverError?.response?.data?.error?
@@ -172,6 +178,8 @@ useEffect(()=>{
       :"Driver signup failed",
       variant: "destructive",
     });
+   }
+
   },[signupDriverError])
 
   const renderBasicInfoForm = () => (
