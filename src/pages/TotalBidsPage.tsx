@@ -15,7 +15,7 @@ const TotalBidsPage = () => {
   const [activeTab, setActiveTab] = useState('pending');
   
   const filteredBids = total_bids?total_bids?.filter(bid => bid.status.toLowerCase() === activeTab):[];
-
+  console.log("total_bids",filteredBids);
   const getStatusIcon = (status) => {
     switch(status) {
       case 'Accepted':
@@ -86,54 +86,62 @@ const TotalBidsPage = () => {
               filteredBids.map((bid:any) => (
                 <div 
                   key={bid.id} 
-                  className="bg-card rounded-lg p-4 border border-border shadow-sm"
-                  onClick={() => navigate(`/rides/${bid.rideId}`)}
+                  className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer"
+                  
                 >
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold">{bid.passengerName}</h3>
-                    <div className="flex items-center gap-1">
-                      {getStatusIcon(bid.status)}
-                      <span className={`text-xs font-medium ${
-                        bid.status === 'Accepted' 
-                          ? 'text-green-800' 
-                          : bid.status === 'Rejected'
-                          ? 'text-red-800'
-                          : 'text-yellow-800'
-                      }`}>
-                        {bid?.status === 'accepted' ? 'Accepted' : bid?.status === 'rejected' ? 'Rejected' : 'Pending'}
-                      </span>
-                    </div>
+                  {/* Top Row: Trip Type & Payment */}
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-semibold tracking-wide uppercase">
+                      {bid?.booking?.trip_type ? bid.booking.trip_type.replace('_', ' ').toUpperCase() + ' TRIP' : 'TRIP'}
+                    </span>
+                    <span className="bg-muted text-xs px-2 py-1 rounded-full font-medium border border-border">
+                      {bid?.booking?.payment_type ? `Paid by ${bid.booking.payment_type}` : 'Paid'}
+                    </span>
                   </div>
-                  
-                  <div className="space-y-3 mb-3">
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1">
-                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        <div className="w-0.5 h-10 bg-border mx-auto my-1"></div>
-                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+
+                  {/* Pickup & Dropoff */}
+                  <div className="flex items-start gap-3 mb-2">
+                    <div className="mt-1 flex flex-col items-center">
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <div className="w-0.5 h-8 bg-border mx-auto my-1"></div>
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div>
+                        <span className="text-xs text-muted-foreground">Pickup :</span>
+                        <span className="block text-sm font-medium leading-tight">{bid?.booking?.pickup_location}</span>
                       </div>
-                      <div className="space-y-3 flex-1">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Pickup</p>
-                          <p className="text-sm">{bid?.booking?.pickup_location}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Dropoff</p>
-                          <p className="text-sm">{bid?.booking?.drop_location}</p>
-                        </div>
+                      <div className="mt-2">
+                        <span className="text-xs text-muted-foreground">Drop :</span>
+                        <span className="block text-sm font-medium leading-tight">{bid?.booking?.drop_location}</span>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="flex justify-between items-center pt-2 border-t border-border">
+
+                  {/* Fare, Distance */}
+                  <div className="grid grid-cols-2 gap-2 text-center my-2">
                     <div>
-                      <p className="text-xs text-muted-foreground">Your Bid</p>
-                      <p className="text-sm font-medium">₹ {bid?.bid_amount}</p>
+                      <p className="flex items-center justify-center gap-1 text-primary font-semibold text-base">
+                        <IndianRupee className="h-4 w-4" /> {bid?.bid_amount}
+                      </p>
+                      <span className="text-xs text-muted-foreground">Your Bid</span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">Est.Distance</p>
-                      <p className="text-sm font-medium">{bid?.booking?.trip_km}KM</p>
+                    <div>
+                      <p className="flex items-center justify-center gap-1 text-sm font-medium">
+                        <ArrowLeft className="h-4 w-4 rotate-90" />
+                        {bid?.booking?.trip_km} KM
+                      </p>
+                      <span className="text-xs text-muted-foreground">Est. Distance</span>
                     </div>
+                  </div>
+
+                  {/* Departure Date/Time */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Departure:</span>
+                    <span className="text-xs font-medium">
+                      {bid?.booking?.pickup_date ? new Date(bid.booking.pickup_date).toLocaleString() : '--'}
+                    </span>
                   </div>
                 </div>
               ))

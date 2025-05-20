@@ -90,47 +90,63 @@ console.log(bid)
 
   return (
     <Card variant="glass" className="w-full animate-scale-in">
-      <CardHeader className="pb-2 border-b border-border/20">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-base">
-            {moment(bid?.booking?.pickup_date).format('DD-MM-YYYY')}
-          </CardTitle>
-          <Badge variant={getBadgeVariant()}>
-            {bid?.status.charAt(0) + bid?.status.slice(1).toLowerCase()}
-          </Badge>
-        </div>
-      </CardHeader>
+      {/* Top Row: Trip Type & Payment */}
+      <div className="flex justify-between items-center mb-2 px-4 pt-4">
+        <span className="text-xs font-semibold tracking-wide uppercase">
+          {bid?.booking?.trip_type ? bid.booking.trip_type.replace('_', ' ').toUpperCase() + ' TRIP' : 'TRIP'}
+        </span>
+        <span className="bg-muted text-xs px-2 py-1 rounded-full font-medium border border-border">
+          {bid?.booking?.payment_type ? `Paid by ${bid.booking.payment_type}` : 'Paid'}
+        </span>
+      </div>
 
-      <CardContent className="pt-4 space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-start">
-            <MapPin className="mr-2 h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+      <CardContent className="pt-2 space-y-4">
+        {/* Pickup & Dropoff */}
+        <div className="flex items-start gap-3 mb-2">
+          <div className="mt-1 flex flex-col items-center">
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <div className="w-0.5 h-8 bg-border mx-auto my-1"></div>
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          </div>
+          <div className="flex-1">
             <div>
-              <p className="text-sm font-medium">Pickup</p>
-              <p className="text-sm text-muted-foreground">{bid?.booking?.pickup_location}</p>
+              <span className="text-xs text-muted-foreground">Pickup :</span>
+              <span className="block text-sm font-medium leading-tight">{bid?.booking?.pickup_location}</span>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs text-muted-foreground">Drop :</span>
+              <span className="block text-sm font-medium leading-tight">{bid?.booking?.drop_location}</span>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-start">
-            <Navigation className="mr-2 h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium">Dropoff</p>
-              <p className="text-sm text-muted-foreground">{bid?.booking?.drop_location}</p>
-            </div>
+        {/* Fare, Distance */}
+        <div className="grid grid-cols-2 gap-2 text-center my-2">
+          <div>
+            <p className="flex items-center justify-center gap-1 text-primary font-semibold text-base">
+              <IndianRupee className="h-4 w-4" /> {bid?.bid_amount}
+            </p>
+            <span className="text-xs text-muted-foreground">Your Bid</span>
+          </div>
+          <div>
+            <p className="flex items-center justify-center gap-1 text-sm font-medium">
+              <Navigation className="h-4 w-4 rotate-90" />
+              {bid?.booking?.trip_km} KM
+            </p>
+            <span className="text-xs text-muted-foreground">Est. Distance</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="flex items-center">
-            <IndianRupee className="mr-2 h-4 w-4 text-blue-400" />
-            <span className="text-sm font-medium">{bid?.bid_amount}</span>
-          </div>
-          <div className="flex items-center">
-            <Calendar className="mr-2 h-4 w-4 text-blue-400" />
-            <span className="text-sm">{formatDate(bid?.timestamp).split(',')[0]}</span>
-          </div>
+        {/* Departure Date/Time */}
+        <div className="flex items-center gap-2 mt-2">
+          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">Departure:</span>
+          <span className="text-xs font-medium">
+            {bid?.booking?.pickup_date ? new Date(bid.booking.pickup_date).toLocaleString() : '--'}
+          </span>
         </div>
 
+        {/* Trip Start Fields (if shown) */}
         {showTripFields && (
           <div className="space-y-3 border-t pt-4">
             <div className="flex items-center gap-2">
@@ -169,6 +185,7 @@ console.log(bid)
         )}
       </CardContent>
 
+      {/* Start Trip Button (if applicable) */}
       {bid.status === 'accepted' && bid?.booking?.status=='driver assigned' && !showTripFields && (
         <CardFooter>
           <Button

@@ -1,4 +1,3 @@
-
 import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
@@ -160,7 +159,7 @@ useEffect(()=>{
   }
   useEffect(()=>{
     if(signupDriverResponse.result==='success'){
-      navigate('/login')
+      navigate('/verification-pending')
       toast({
         title: "Success",
         description: "Driver signed up successfully",

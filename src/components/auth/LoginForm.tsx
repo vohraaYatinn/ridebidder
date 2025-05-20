@@ -77,6 +77,9 @@ useEffect(()=>{
 
 useEffect(()=>{
   if(otpVerifyResponse.result==='success'){
+    if(!otpVerifyResponse?.is_active){
+      navigate('/verification-pending')
+    }
     const token = otpVerifyResponse['access'];
     localStorage.setItem("token", token);
     navigate('/dashboard')

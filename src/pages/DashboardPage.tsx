@@ -91,51 +91,44 @@ const[fetchDashboardData,setFetchDashboardData] = useState(true)
       <main className="p-4 space-y-6">
         {/* Stats Cards */}
         <section className="grid grid-cols-2 gap-4">
-          <div 
-            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+          {/* Ongoing Rides */}
+          <div
+            className="bg-card rounded-2xl p-6 border border-border shadow-md flex flex-col items-center cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => navigate('/ongoing-rides',{state:{ongoing_rides:dashboardData?.ongoing_rides}})}
           >
-            <div className="flex items-center gap-2">
-              <Car className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Ongoing Rides</h3>
-            </div>
-            <p className="text-2xl font-bold mt-2">{dashboardData?.ongoing_rides?dashboardData?.ongoing_rides?.length:'0'}</p>
+            <Car className="h-12 w-12 text-primary mb-3" />
+            <h3 className="font-semibold text-center mb-1">Ongoing Rides</h3>
+            <p className="text-2xl font-bold text-center">{dashboardData?.ongoing_rides ? dashboardData?.ongoing_rides.length : '0'}</p>
           </div>
-          
-          <div 
-            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+
+          {/* Total Rides */}
+          <div
+            className="bg-card rounded-2xl p-6 border border-border shadow-md flex flex-col items-center cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => navigate('/total-rides',{state:{total_rides:dashboardData?.total_rides}})}
           >
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Total Rides</h3>
-            </div>
-            <p className="text-2xl font-bold mt-2">{dashboardData?.total_rides?dashboardData?.total_rides.length:'0'}</p>
+            <Clock className="h-12 w-12 text-primary mb-3" />
+            <h3 className="font-semibold text-center mb-1">Total Rides</h3>
+            <p className="text-2xl font-bold text-center">{dashboardData?.total_rides ? dashboardData?.total_rides.length : '0'}</p>
           </div>
-          
-          <div 
-            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+
+          {/* Total Bids */}
+          <div
+            className="bg-card rounded-2xl p-6 border border-border shadow-md flex flex-col items-center cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => navigate('/total-bids',{state:{total_bids:dashboardData?.total_bids}})}
           >
-            <div className="flex items-center gap-2">
-              <IndianRupee className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Total Bids</h3>
-            </div>
-            <p className="text-2xl font-bold mt-2">{dashboardData?.total_bids?dashboardData?.total_bids.length:'0'}</p>
+            <IndianRupee className="h-12 w-12 text-primary mb-3" />
+            <h3 className="font-semibold text-center mb-1">Total Bids</h3>
+            <p className="text-2xl font-bold text-center">{dashboardData?.total_bids ? dashboardData?.total_bids.length : '0'}</p>
           </div>
-          
-          <div 
-            className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate('/ratings',{state:{ratings:dashboardData?.ratings,
-              average_rating:dashboardData?.average_rating,
-              ratingDistribution:dashboardData?.ratingDistribution
-            }})}
+
+          {/* Rating */}
+          <div
+            className="bg-card rounded-2xl p-6 border border-border shadow-md flex flex-col items-center cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate('/ratings',{state:{ratings:dashboardData?.ratings, average_rating:dashboardData?.average_rating, ratingDistribution:dashboardData?.ratingDistribution}})}
           >
-            <div className="flex items-center gap-2">
-              <Star className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Rating</h3>
-            </div>
-            <p className="text-2xl font-bold mt-2">{dashboardData?.average_rating?dashboardData?.average_rating:'0'}</p>
+            <Star className="h-12 w-12 text-primary mb-3" />
+            <h3 className="font-semibold text-center mb-1">Rating</h3>
+            <p className="text-2xl font-bold text-center">{dashboardData?.average_rating ? dashboardData?.average_rating : '0'}</p>
           </div>
         </section>
        
