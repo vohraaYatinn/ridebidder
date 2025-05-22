@@ -18,6 +18,7 @@ import TotalRidesPage from "./pages/TotalRidesPage";
 import TotalBidsPage from "./pages/TotalBidsPage";
 import RatingsPage from "./pages/RatingsPage";
 import VerificationPendingPage from "./pages/VerificationPendingPage";
+import FAQPage from "./pages/FAQPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,8 @@ const App = () => (
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/verification-pending" element={<VerificationPendingPage />} />
+          <Route path="/support-chat" element={<div className="min-h-screen flex items-center justify-center text-2xl">Support Chat Coming Soon</div>} />
+          <Route path="/faq" element={<FAQPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

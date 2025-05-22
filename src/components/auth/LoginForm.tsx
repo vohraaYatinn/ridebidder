@@ -50,6 +50,7 @@ const LoginForm = () => {
     }
   };
   useEffect(()=>{
+    console.log(otpResponse)
     if(otpResponse.result==='success'){
       setShowOtpInput(true);
       console.log(otpResponse)
@@ -61,25 +62,31 @@ const LoginForm = () => {
       });
     }
 
+
   },[otpResponse])
 
 useEffect(()=>{
   if(otpError?.status){
+
+    console.log(otpError?.status)
     toast({
       title: "Error",
       description:otpError?.response?.data?.error?
       otpError?.response?.data?.error :`OTP not sent to ${phoneNumber}`,
       variant: "destructive",
     });
+    if(otpError?.status == 401){
+      setTimeout(()=>{
+        localStorage.clear()
+        window.location.reload()
+      },1500)    }
+
   }
 
 },[otpError])
 
 useEffect(()=>{
   if(otpVerifyResponse.result==='success'){
-    if(!otpVerifyResponse?.is_active){
-      navigate('/verification-pending')
-    }
     const token = otpVerifyResponse['access'];
     localStorage.setItem("token", token);
     navigate('/dashboard')

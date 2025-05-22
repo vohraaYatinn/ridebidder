@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, DollarSign, CheckCircle, XCircle, Clock, IndianRupee } from 'lucide-react';
+import { ArrowLeft, DollarSign, CheckCircle, XCircle, Clock, IndianRupee, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import BottomNavigation from '@/components/common/BottomNavigation';
 import { useLocation } from "react-router-dom";
+import { editBidService } from '../urls/urls';
+import useAxios from '../hooks/useAxios';
+import { toast } from '@/hooks/use-toast';
 
 // Mock data (in a real app, this would come from an API)
 
@@ -12,7 +17,13 @@ const TotalBidsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { total_bids } = location.state || {}
+  console.log("total",total_bids)
   const [activeTab, setActiveTab] = useState('pending');
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedBid, setSelectedBid] = useState(null);
+  const [editedAmount, setEditedAmount] = useState('');
+  const [editBidData, editBidError, editBidLoading, editBidSubmit] = useAxios();
+  const [fetch, setFetch] = useState(false);
   
   const filteredBids = total_bids?total_bids?.filter(bid => bid.status.toLowerCase() === activeTab):[];
   console.log("total_bids",filteredBids);
@@ -28,6 +39,48 @@ const TotalBidsPage = () => {
         return null;
     }
   };
+
+  const handleEditClick = (bid) => {
+    setSelectedBid(bid);
+    setEditedAmount(bid.bid_amount.toString());
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!selectedBid || !editedAmount) return;
+    
+    editBidSubmit(editBidService({
+      bid_id: selectedBid.id,
+      bid_amount: parseFloat(editedAmount)
+    }));
+  };
+
+  // Show toast on edit success
+  React.useEffect(() => {
+    if (editBidData && editBidData?.result === 'success') {
+      toast({
+        title: 'Bid Updated',
+        description: 'Your bid amount has been updated successfully.',
+      });
+      setIsEditDialogOpen(false);
+      setSelectedBid(null);
+      setEditedAmount('');
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
+    }
+  }, [editBidData]);
+
+  // Show toast on edit error
+  React.useEffect(() => {
+    if (editBidError && editBidError?.response?.data?.result === 'failure') {
+      toast({
+        title: 'Error',
+        description: editBidError?.response?.data?.error || 'Failed to update bid amount',
+        variant: 'destructive',
+      });
+    }
+  }, [editBidError]);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -87,7 +140,6 @@ const TotalBidsPage = () => {
                 <div 
                   key={bid.id} 
                   className="bg-card rounded-lg p-4 border border-border shadow-sm cursor-pointer"
-                  
                 >
                   {/* Top Row: Trip Type & Payment */}
                   <div className="flex justify-between items-center mb-2">
@@ -143,6 +195,22 @@ const TotalBidsPage = () => {
                       {bid?.booking?.pickup_date ? new Date(bid.booking.pickup_date).toLocaleString() : '--'}
                     </span>
                   </div>
+
+                  {/* Edit Button for Pending Bids */}
+                  {bid.status.toLowerCase() === 'pending' && (
+                    <div className="mt-3 flex justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditClick(bid)}
+                        className="flex items-center gap-1"
+                        disabled={editBidLoading}
+                      >
+                        <Edit2 className="h-4 w-4" />
+                        {editBidLoading ? 'Updating...' : 'Edit Bid'}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (
@@ -153,6 +221,50 @@ const TotalBidsPage = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Edit Bid Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Bid Amount</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">New Bid Amount</label>
+                <div className="relative mt-1">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <IndianRupee className="h-4 w-4" />
+                  </span>
+                  <Input
+                    type="number"
+                    value={editedAmount}
+                    onChange={(e) => setEditedAmount(e.target.value)}
+                    className="pl-8"
+                    placeholder="Enter new bid amount"
+                    disabled={editBidLoading}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsEditDialogOpen(false)}
+              disabled={editBidLoading}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleSaveEdit}
+              disabled={editBidLoading || !editedAmount}
+            >
+              {editBidLoading ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       
       <BottomNavigation />
     </div>

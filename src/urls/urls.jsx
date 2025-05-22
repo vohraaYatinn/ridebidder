@@ -23,6 +23,9 @@ export const verifyOtpService = (payload_data) => {
 export const placeBidService = (payload_data) => {
   return project.post(Urls.PLACE_BID , payload_data);
 };
+export const editBidService = (payload_data) => {
+  return project.post(Urls.EDIT_BID , payload_data);
+};
 
 
 export const getDashboardDataDriver = (payload_data) => {

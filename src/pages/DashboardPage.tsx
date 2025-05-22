@@ -131,42 +131,6 @@ const[fetchDashboardData,setFetchDashboardData] = useState(true)
             <p className="text-2xl font-bold text-center">{dashboardData?.average_rating ? dashboardData?.average_rating : '0'}</p>
           </div>
         </section>
-       
-       
-        {/* Available Rides for Bidding */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Available Rides for Bidding</h2>
-          </div>
-{/*           
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search rides..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full py-2 pl-10 pr-4 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div> */}
-          
-          <div className="space-y-4">
-            { !dashboardDataLoading && dashboardData?.booking  ? (
-              dashboardData?.booking.map((ride:any) => (
-                <RideCard 
-                  key={ride.id} 
-                  ride={ride} 
-                  onBidSubmit={handleBidSubmit}
-                  onClick={() => handleRideClick(ride.id)}
-                />
-              ))
-            ) : (
-              <div className="text-center py-10">
-                <p className="text-muted-foreground">No rides found</p>
-              </div>
-            )}
-          </div>
-        </section>
       </main>
       
       <BottomNavigation assigned_rides_number={dashboardData?.assigned_rides_number}/>

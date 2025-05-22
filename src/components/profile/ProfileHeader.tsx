@@ -1,12 +1,11 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { UserProfile } from '@/data/mockData';
 import { Star, Mail, Phone, Car } from 'lucide-react';
 import Button from '../common/Button';
 
-
-
+// Default profile image
+const DEFAULT_PROFILE_IMAGE = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
 
 const ProfileHeader = ({ profile }) => {
   console.log(profile);
@@ -16,8 +15,8 @@ const ProfileHeader = ({ profile }) => {
         <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
           <div className="h-24 w-24 rounded-full border-4 border-background overflow-hidden">
             <img 
-              src={profile?.profileImage} 
-              alt={profile?.user?.first_name}
+              src={profile?.profileImage || DEFAULT_PROFILE_IMAGE} 
+              alt={profile?.user?.first_name || 'User'}
               className="h-full w-full object-cover"
             />
           </div>
