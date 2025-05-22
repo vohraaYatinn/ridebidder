@@ -9,6 +9,7 @@ export class Urls {
     static GET_DASHBOARD_DATA_DRIVER = Urls.API_PREFIX + 'get-dashboarddata-driver/';
     static GET_BIDS_DATA_DRIVER = Urls.API_PREFIX + 'all-bids-driver/';
     static PLACE_BID = Urls.API_PREFIX + 'place-bid/';
+    static EDIT_BID = Urls.API_PREFIX + 'edit-bid/';
     static GET_WALLET_DATA_DRIVER = Urls.API_PREFIX + 'driver-payment-overview/';
     static GET_PROFILE_DATA_DRIVER = Urls.API_PREFIX + 'driver-profile/';
     static START_TRIP = Urls.API_PREFIX + 'start-trip/';
