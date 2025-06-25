@@ -23,9 +23,7 @@ export class HttpAxiosService {
     // xsrfHeaderName: 'X-CSRFToken',
     // xsrfCookieName: 'csrftoken',
     headers: {
-        'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
-        
     }
 });
   }
@@ -62,7 +60,10 @@ export class HttpAxiosService {
       axiosInstance: this.axiosMuliPartInstance,
       method: "post",
       url: url,
-      requestConfig: data
+      requestConfig: data,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     };
   }
   

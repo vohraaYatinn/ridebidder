@@ -2,6 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keyboard handling for mobile */
+@media (max-width: 768px) {
+  .keyboard-adjust {
+    transition: all 0.3s ease;
+  }
+  
+  /* Prevent zoom on input focus */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="tel"], 
+  input[type="password"],
+  input[type="number"],
+  textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Smooth input transitions */
+  input:focus,
+  textarea:focus {
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+}
+
+/* Capacitor specific viewport handling */
+body.keyboard-is-open {
+  --keyboard-height: env(keyboard-height, 0px);
+}
+
+/* Safe area handling */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

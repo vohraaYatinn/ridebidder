@@ -10,7 +10,11 @@ const carImg = 'https://images.unsplash.com/photo-1464983953574-0892a716854b?aut
 
 const Onboarding = () => {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
+  console.log("token",token)
+  if(token){
+    navigate('/dashboard');
+  }
   const handleGo = () => {
     navigate('/login');
   };

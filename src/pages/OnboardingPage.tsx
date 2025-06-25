@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/common/Card';
 import Button from '@/components/common/Button';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,17 @@ import { MessageCircle, HelpCircle } from 'lucide-react';
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
+  useEffect(()=>{
+    console.log("token2",token)
+    if(token){
+      navigate('/dashboard');
+    }
+  }, [token])
+ 
+  const handleGo = () => {
+    navigate('/login');
+  };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md text-center animate-fade-in py-8 px-4" style={{

@@ -152,9 +152,7 @@ const RideDetailPage = () => {
                   className="pl-10"
                 />
               </div>
-              <p className="text-sm text-muted-foreground mt-1">
-                Suggested bid: ${(ride.estimatedFare * 0.9).toFixed(2)} - ${(ride.estimatedFare * 1.1).toFixed(2)}
-              </p>
+            
             </div>
             
             <Button 

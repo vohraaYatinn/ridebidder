@@ -35,6 +35,7 @@ const ProfilePage = () => {
       description: "Logged out successfully",
       variant: "default",
     });
+    localStorage.clear()
     setTimeout(() => {
       navigate('/login');
     }, 1000);

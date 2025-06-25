@@ -8,6 +8,7 @@ import useAxios from '@/hooks/useAxios';
 import { endTrip, collectPayment } from '@/urls/urls';
 import Modal from '@/components/common/Modal';
 import { toast } from '@/hooks/use-toast';
+import { Switch } from '@/components/ui/switch';
 
 const OngoingRidesPage = () => {
   const navigate = useNavigate();
@@ -33,16 +34,34 @@ const OngoingRidesPage = () => {
   const [extraFare, setExtraFare] = useState(0);
   const [PendingFare, setPendingFare] = useState(0);
   const [booking_id, setbooking_id] = useState(null);
+  const [isTollIncluded, setIsTollIncluded] = useState(true);
 
-  const handleImageChange = (e) => {
-    setMeterImage(e.target.files[0]);
+  const handleMeterPhotoCapture = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment'; // Use the back camera
+    input.click();
+
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        const file = target.files[0];
+        setMeterImage(file);
+        toast({
+          title: "Photo captured",
+          description: "Meter reading photo has been captured successfully.",
+          variant: "default",
+        });
+      }
+    };
   };
 
   const handleEndTrip = async (rideId) => {
     if (!meterImage || !currentKm) {
       toast({
         title: "Trip Ended",
-        description: "Please upload meter image and enter KM.",
+        description: "Please capture meter photo and enter KM.",
         variant: "destructive",
       });
       return;
@@ -53,7 +72,7 @@ const OngoingRidesPage = () => {
       end_trip_image: meterImage,
       end_km: currentKm,
       booking_id: rideId,
-      toll_amount: tollAmount
+      toll_amount: isTollIncluded ? "0" : tollAmount || "0"
     }));
   };
 
@@ -174,17 +193,19 @@ const OngoingRidesPage = () => {
                       <div className="space-y-3 border-t pt-4">
                         <div className="flex items-center gap-2">
                           <Camera className="h-4 w-4 text-muted-foreground" />
-                          <label htmlFor="meterPhoto" className="text-sm font-medium">
-                            Meter Photo
-                          </label>
-                          <input
-                            id="meterPhoto"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="text-sm"
-                          />
+                          <span className="text-sm font-medium flex-1">Meter Photo</span>
+                          <button
+                            onClick={handleMeterPhotoCapture}
+                            className="flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-lg text-sm font-medium"
+                            type="button"
+                          >
+                            <Camera className="h-4 w-4" />
+                            {meterImage ? 'Retake Photo' : 'Take Photo'}
+                          </button>
                         </div>
+                        {meterImage && (
+                          <div className="text-xs text-green-600 pl-6">✓ Meter photo captured</div>
+                        )}
 
                         <div className="flex items-center gap-2">
                           <Gauge className="h-4 w-4 text-muted-foreground" />
@@ -200,20 +221,34 @@ const OngoingRidesPage = () => {
                             className="border px-3 py-1 rounded-md text-sm w-full"
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <CarTaxiFront className="h-4 w-4 text-muted-foreground" />
-                          <label htmlFor="tollAmount" className="text-sm font-medium">
-                            Toll Collected
-                          </label>
-                          <input
-                            id="tollAmount"
-                            type="number"
-                            value={tollAmount}
-                            onChange={(e) => setTollAmount(e.target.value)}
-                            placeholder="e.g.₹300"
-                            className="border px-3 py-1 rounded-md text-sm w-full"
+
+                        <div className="flex items-center justify-between gap-2 py-2">
+                          <div className="flex items-center gap-2">
+                            <CarTaxiFront className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm font-medium">Toll Tax Included</span>
+                          </div>
+                          <Switch
+                            checked={isTollIncluded}
+                            onCheckedChange={setIsTollIncluded}
                           />
                         </div>
+
+                        {!isTollIncluded && (
+                          <div className="flex items-center gap-2">
+                            <CarTaxiFront className="h-4 w-4 text-muted-foreground" />
+                            <label htmlFor="tollAmount" className="text-sm font-medium">
+                              Toll Amount
+                            </label>
+                            <input
+                              id="tollAmount"
+                              type="number"
+                              value={tollAmount}
+                              onChange={(e) => setTollAmount(e.target.value)}
+                              placeholder="e.g.₹300"
+                              className="border px-3 py-1 rounded-md text-sm w-full"
+                            />
+                          </div>
+                        )}
 
                         <Button 
                           disabled={tripLoading} 

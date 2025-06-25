@@ -36,8 +36,8 @@ const useAxios = () => {
             setLoading(true);
             const ctrl = new AbortController();
             setController(ctrl);
-            const res = await axiosInstance[method.toLowerCase()](url, {
-                ...requestConfig
+            const res = await axiosInstance[method.toLowerCase()](url, requestConfig, {
+                headers: configObj.headers
             });
             setResponse(res?.data);
         } catch (err) {
@@ -51,7 +51,6 @@ const useAxios = () => {
             }
             if (err?.response?.status === 403) {
                 localStorage.clear()
-
                 router.push("/login")
             }
             else{
